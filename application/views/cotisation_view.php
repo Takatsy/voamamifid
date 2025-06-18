@@ -37,7 +37,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <label for="inputText" class="col-sm-2 col-form-label">Membre</label>
               <div class="col-sm-12">
                 <select name="ID_membre" class="form-control" required>
-                  <option value="">-- Sélectionner un membre --</option>
+                  <option value="">Sélectionner un membre </option>
                   <?php foreach ($membre as $m): ?>
                       <option value="<?= $m->ID_membre ?>">
                           <?= $m->Nom ?> <?= $m->Prenom ?>
@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
               
             <div class="row mb-3">
-                <label for="inputNumber" class="col-sm-4 col-form-label">Montant</label>
+                <label for="inputNumber" class="col-sm-4 col-form-label">Montant (Ar)</label>
                 <div class="col-sm-12">
                   <input type="number" name ="Montant" class="form-control" placeholder ="Montant à payer">
                 </div>
@@ -102,7 +102,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <td><?= $m->ID_cotisation ?></td>
                     <td><?= $m->Nom?></td>
                     <td><?= $m->Prenom?></td>
-                    <td><?= $m->Montant ?></td>
+                    <td><?= $m->Montant ?> Ar</td>
                     <td><?= $m->Date ?></td>
                     
                     

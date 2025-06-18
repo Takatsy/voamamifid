@@ -15,9 +15,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <h1>Form Elements</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">cotisation</a></li>
+      <li class="breadcrumb-item"><a href="index.html">Engalia</a></li>
       <li class="breadcrumb-item">Formulaire</li>
-      <li class="active">Mission</li>
+      <li class="breadcrumb-item active">Engalia</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
@@ -28,17 +28,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Tous les cotisations</h5>
+          <h5 class="card-title">Tous les Engalia</h5>
 
           <!-- General Form Elements -->
-          <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/cotisation'; ?>">
+          <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/engalia'; ?>">
             <div class="row mb-3">
                 <input type="hidden" name="action" value="update">
-                <input type="hidden" name="id" value="<?= $cotisation->ID_cotisation ?>">
+                <input type="hidden" name="id" value="<?= $engalia->ID_engalia ?>">
               <label for="inputText" class="col-sm-2 col-form-label">Membre</label>
               <div class="col-sm-12">
                 <select name="ID_membre" class="form-control" required>
-                  <option value="<?= $cotisation->ID_membre ?>"><?= $cotisation->Nom.' '.$cotisation->Prenom  ?></option>
+                  <option value="<?= $engalia->ID_membre ?>"><?= $engalia->Nom.' '.$engalia->Prenom  ?></option>
                   <?php foreach ($membre as $m): ?>
                       <option value="<?= $m->ID_membre ?>">
                           <?= $m->Nom.' '.$m->Prenom  ?>
@@ -51,13 +51,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="row mb-3">
                 <label for="inputNumber" class="col-sm-4 col-form-label">Montant (Ar)</label>
                 <div class="col-sm-12">
-                  <input type="number" name ="Montant" class="form-control" value="<?= $cotisation->Montant ?>" placeholder ="Montant à payer">
+                  <input type="number" name ="Montant" class="form-control" value="<?= $engalia->Montant ?>" placeholder ="Montant à payer">
                 </div>
               </div>
               <div class="row mb-3">
                 <label for="inputNumber" class="col-sm-4 col-form-label">Date paiement</label>
                 <div class="col-sm-12">
-                  <input type="date" name="Date"class="form-control" value="<?= $cotisation->Date ?>" placeholder ="Montant à payer">
+                  <input type="date" name="Date"class="form-control" value="<?= $engalia->Date ?>" placeholder ="Montant à payer">
                 </div>
               </div>
  
@@ -66,7 +66,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <label class="col-sm-2 col-form-label"></label>
               <div class="col-sm-12">
               <button type="submit" id="submit"  name="submit" class="btn btn-primary">Modifier</button>
-                    <a href="<?php echo base_url().'index.php/vm_controller/cotisation'; ?>" class="btn btn-danger">Annuler</a>
+                    <a href="<?php echo base_url().'index.php/vm_controller/engalia'; ?>" class="btn btn-danger">Annuler</a>
               </div>
             </div>
 
@@ -78,7 +78,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
 
     <!-- autre  -->
-   
+    
+  </div>
 </section>
 
 </main><!-- End #main -->

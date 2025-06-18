@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 17 juin 2025 à 12:25
+-- Généré le : mar. 17 juin 2025 à 13:25
 -- Version du serveur : 10.6.19-MariaDB
 -- Version de PHP : 8.0.30
 
@@ -28,19 +28,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `anjara` (
-  `ID_anjara` int(10) NOT NULL,
-  `Montant` double NOT NULL
+  `ID` int(10) NOT NULL,
+  `ID_membre` int(10) NOT NULL,
+  `Montant` double NOT NULL,
+  `Nbr_anjara` int(10) NOT NULL,
+  `Date_reunion` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `anjara`
---
-
-INSERT INTO `anjara` (`ID_anjara`, `Montant`) VALUES
-(1, 0),
-(2, 0),
-(3, 1000),
-(4, 5000);
 
 -- --------------------------------------------------------
 
@@ -60,9 +53,10 @@ CREATE TABLE `cotisation` (
 --
 
 INSERT INTO `cotisation` (`ID_cotisation`, `ID_membre`, `Montant`, `Date`) VALUES
-(10, 14, 80000, '2025-06-17'),
-(11, 15, 2000000, '2025-06-17'),
-(12, 16, 20000, '2025-06-17');
+(1, 1, 50000, '2025-06-17'),
+(2, 2, 30000, '2025-06-17'),
+(3, 3, 20000, '2025-06-17'),
+(4, 4, 40000, '2025-06-17');
 
 -- --------------------------------------------------------
 
@@ -72,9 +66,9 @@ INSERT INTO `cotisation` (`ID_cotisation`, `ID_membre`, `Montant`, `Date`) VALUE
 
 CREATE TABLE `engalia` (
   `ID_engalia` int(10) NOT NULL,
+  `ID_membre` int(10) NOT NULL,
   `Montant` double NOT NULL,
-  `ID_mission` int(10) NOT NULL,
-  `ID_membre` int(10) NOT NULL
+  `Date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -94,27 +88,10 @@ CREATE TABLE `membre` (
 --
 
 INSERT INTO `membre` (`ID_membre`, `Nom`, `Prenom`) VALUES
-(14, 'Noass', 'Marius'),
-(15, 'TAKATSY', 'pongilaryssss'),
-(16, 'Setra', 'Pongre');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `mission`
---
-
-CREATE TABLE `mission` (
-  `ID_mission` int(10) NOT NULL,
-  `Nbrjours` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `mission`
---
-
-INSERT INTO `mission` (`ID_mission`, `Nbrjours`) VALUES
-(1, 5);
+(1, 'Rafenoarivo', 'Marius'),
+(2, 'Noass', 'Mihary'),
+(3, 'setra', 'José'),
+(4, 'Dhore', 'Miha');
 
 -- --------------------------------------------------------
 
@@ -128,20 +105,6 @@ CREATE TABLE `pret` (
   `Montant` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Structure de la table `reunion`
---
-
-CREATE TABLE `reunion` (
-  `ID_reunion` int(10) NOT NULL,
-  `ID_anjara` int(10) NOT NULL,
-  `ID_membre` int(10) NOT NULL,
-  `Date_reunion` date NOT NULL,
-  `Nbranjara` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Index pour les tables déchargées
 --
@@ -150,33 +113,28 @@ CREATE TABLE `reunion` (
 -- Index pour la table `anjara`
 --
 ALTER TABLE `anjara`
-  ADD PRIMARY KEY (`ID_anjara`);
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FKANJARA822870` (`ID_membre`);
 
 --
 -- Index pour la table `cotisation`
 --
 ALTER TABLE `cotisation`
-  ADD PRIMARY KEY (`ID_cotisation`);
+  ADD PRIMARY KEY (`ID_cotisation`),
+  ADD KEY `FKCOTISATION401824` (`ID_membre`);
 
 --
 -- Index pour la table `engalia`
 --
 ALTER TABLE `engalia`
   ADD PRIMARY KEY (`ID_engalia`),
-  ADD KEY `ENGALIA` (`ID_mission`),
-  ADD KEY `ENGALIA2` (`ID_membre`);
+  ADD KEY `FKENGALIA478912` (`ID_membre`);
 
 --
 -- Index pour la table `membre`
 --
 ALTER TABLE `membre`
   ADD PRIMARY KEY (`ID_membre`);
-
---
--- Index pour la table `mission`
---
-ALTER TABLE `mission`
-  ADD PRIMARY KEY (`ID_mission`);
 
 --
 -- Index pour la table `pret`
@@ -186,14 +144,6 @@ ALTER TABLE `pret`
   ADD KEY `FKPRET86184` (`ID_membre`);
 
 --
--- Index pour la table `reunion`
---
-ALTER TABLE `reunion`
-  ADD PRIMARY KEY (`ID_reunion`),
-  ADD KEY `REUNION` (`ID_anjara`),
-  ADD KEY `REUNION2` (`ID_membre`);
-
---
 -- AUTO_INCREMENT pour les tables déchargées
 --
 
@@ -201,13 +151,13 @@ ALTER TABLE `reunion`
 -- AUTO_INCREMENT pour la table `anjara`
 --
 ALTER TABLE `anjara`
-  MODIFY `ID_anjara` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `cotisation`
 --
 ALTER TABLE `cotisation`
-  MODIFY `ID_cotisation` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID_cotisation` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `engalia`
@@ -219,13 +169,7 @@ ALTER TABLE `engalia`
 -- AUTO_INCREMENT pour la table `membre`
 --
 ALTER TABLE `membre`
-  MODIFY `ID_membre` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT pour la table `mission`
---
-ALTER TABLE `mission`
-  MODIFY `ID_mission` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_membre` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `pret`
@@ -234,34 +178,32 @@ ALTER TABLE `pret`
   MODIFY `ID_pret` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `reunion`
---
-ALTER TABLE `reunion`
-  MODIFY `ID_reunion` int(10) NOT NULL AUTO_INCREMENT;
-
---
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `anjara`
+--
+ALTER TABLE `anjara`
+  ADD CONSTRAINT `FKANJARA822870` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
+
+--
+-- Contraintes pour la table `cotisation`
+--
+ALTER TABLE `cotisation`
+  ADD CONSTRAINT `FKCOTISATION401824` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
 
 --
 -- Contraintes pour la table `engalia`
 --
 ALTER TABLE `engalia`
-  ADD CONSTRAINT `ENGALIA` FOREIGN KEY (`ID_mission`) REFERENCES `mission` (`ID_mission`),
-  ADD CONSTRAINT `ENGALIA2` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
+  ADD CONSTRAINT `FKENGALIA478912` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
 
 --
 -- Contraintes pour la table `pret`
 --
 ALTER TABLE `pret`
   ADD CONSTRAINT `FKPRET86184` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
-
---
--- Contraintes pour la table `reunion`
---
-ALTER TABLE `reunion`
-  ADD CONSTRAINT `REUNION` FOREIGN KEY (`ID_anjara`) REFERENCES `anjara` (`ID_anjara`),
-  ADD CONSTRAINT `REUNION2` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

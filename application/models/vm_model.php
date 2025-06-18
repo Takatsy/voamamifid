@@ -89,7 +89,33 @@ class Vm_model extends CI_Model {
     public function update_cotisation($ID_cotisation, $data) {
         $this->db->where('ID_cotisation', $ID_cotisation);
         $this->db->update('cotisation', $data);
-    }   
+    } 
+    
+    ////////engaliaa////
+    public function engalia() {
+        $this->db->select('engalia.*, membre.Nom, membre.Prenom');
+        $this->db->from('engalia');
+        $this->db->join('membre', 'membre.ID_membre = engalia.ID_membre');
+        $query = $this->db->get();
+        return $query->result();  // renvoie un tableau d'objets
+    }
+
+    public function delete_engalia($ID_engalia) {
+        $this->db->where('ID_engalia', $ID_engalia);
+        $this->db->delete('engalia');
+    }
+    public function ajout_engalia($data) {
+        $this->db->insert('engalia', $data);
+    }
+
+    public function get_engalia($ID_engalia) {
+        $query = $this->db->query("SELECT * FROM membre, engalia WHERE membre.ID_membre= engalia.ID_membre and engalia.ID_engalia = '$ID_engalia' ");
+        return $query->row();  // renvoie un tableau d'objets
+    }
+    public function update_engalia($ID_engalia, $data) {
+        $this->db->where('ID_engalia', $ID_engalia);
+        $this->db->update('engalia', $data);
+    } 
 }
     
 ?>

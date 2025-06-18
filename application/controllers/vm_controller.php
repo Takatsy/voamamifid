@@ -16,11 +16,86 @@ public function index(){
 }
 
 
-public function engalia()
+public function engalia($action = null, $ID_engalia = null)
 {
-	$this->load->view('engalia_view');
 	
+    $this->load->model('vm_model');
+    $data = [];
+
+    // Supprimer une engalia
+    if ($action == 'supprimer' && !empty($ID_engalia)) {
+        $this->vm_model->delete_engalia($ID_engalia);
+        $this->session->set_flashdata('success', 'Cotisation supprimée avec succès');
+        redirect(base_url('index.php/vm_controller/engalia'));
+    }
+
+    // Formulaire de modification
+    if ($action === 'modifier' && !empty($ID_engalia)) {
+        $data['engalia'] = $this->vm_model->get_engalia($ID_engalia);
+        $data['membre'] = $this->vm_model->membre();
+        $this->load->view('modif_engalia_view', $data);
+        return;
+    }
+
+    // Lire toutes les engalia
+    $data['engalia'] = $this->vm_model->engalia();
+	$data['membre'] = $this->vm_model->membre(); // ajouter ça
+
+    // Ajouter une engalia
+    if ($this->input->post('action') == 'add') {
+        $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
+        $this->form_validation->set_rules('Date', 'Date', 'required');
+
+        if ($this->form_validation->run()) {
+            $formArray = array(
+                'Montant' => $this->input->post('Montant'),
+                'Date' => $this->input->post('Date'),
+                'ID_membre' => $this->input->post('ID_membre')
+            );
+            $this->vm_model->ajout_engalia($formArray);
+            $this->session->set_flashdata('success', 'engalia ajoutée avec succès');
+            redirect(base_url('index.php/vm_controller/engalia'));
+        }
+    }
+
+    // Modifier une engalia
+    if ($this->input->post('action') == 'update') {
+        $id_update = $this->input->post('id');
+        $formArray = array(
+            'Montant' => $this->input->post('Montant'),
+            'Date' => $this->input->post('Date'),
+            'ID_membre' => $this->input->post('ID_membre')
+        );
+        $this->vm_model->update_engalia($id_update, $formArray);
+        $this->session->set_flashdata('success', 'engalia modifiée avec succès');
+        redirect(base_url('index.php/vm_controller/engalia'));
+    }
+
+    // Vue
+    $this->load->view('engalia_view', $data);
 }
+
+	
+
+	public function anjara(){
+		// if(!$this->session->userdata("email")){
+		// 	return redirect( base_url('index.php/emploie/login/') );
+		// }else{
+			$this->load->model('vm_model');
+			$this->form_validation->set_rules('Montant','Montant','required');
+		
+			
+			if ($this->form_validation->run() == false) {
+				$this->load->view('acceuil.php');
+			} else {
+				$formArray = array();
+				$formArray['Montant']=$this->input->post('Montant');
+				$this->vm_model->ajout_anjara($formArray);
+				$this->session->set_flashdata('success', 'Ajout avec succes');
+				redirect(base_url().'index.php/vm_controller/index');
+			}
+		}
+
 public function pret()
 {
 	$this->load->view('pret_view');
@@ -153,25 +228,7 @@ public function cotisation($action = null, $ID_cotisation = null) {
 
 	
 
-	public function anjara(){
-		// if(!$this->session->userdata("email")){
-		// 	return redirect( base_url('index.php/emploie/login/') );
-		// }else{
-			$this->load->model('vm_model');
-			$this->form_validation->set_rules('Montant','Montant','required');
-		
-			
-			if ($this->form_validation->run() == false) {
-				$this->load->view('acceuil.php');
-			} else {
-				$formArray = array();
-				$formArray['Montant']=$this->input->post('Montant');
-				$this->vm_model->ajout_anjara($formArray);
-				$this->session->set_flashdata('success', 'Ajout avec succes');
-				redirect(base_url().'index.php/vm_controller/index');
-			}
-		}
-	public function mission(){
+public function mission(){
 		// if(!$this->session->userdata("email")){
 		// 	return redirect( base_url('index.php/emploie/login/') );
 		// }else{

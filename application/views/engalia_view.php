@@ -31,24 +31,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <h5 class="card-title">Tous les Engalia</h5>
 
           <!-- General Form Elements -->
-          <form>
+          <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/engalia'; ?>">
             <div class="row mb-3">
-              <label for="inputText" class="col-sm-3 col-form-label">Membre</label>
+              <input type="hidden" name="action" value="add">
+              <label for="inputText" class="col-sm-2 col-form-label">Membre</label>
               <div class="col-sm-12">
-                <input type="text" class="form-control">
-              </div>
+                <select name="ID_membre" class="form-control" required>
+                  <option value="">Sélectionner un membre </option>
+                  <?php foreach ($membre as $m): ?>
+                      <option value="<?= $m->ID_membre ?>">
+                          <?= $m->Nom ?> <?= $m->Prenom ?>
+                      </option>
+                  <?php endforeach; ?>
+              </select>
+            </div>
             </div>
             <div class="row mb-3">
-              <label for="inputText" class="col-sm-3 col-form-label">Mission</label>
+              <label for="inputText" class="col-sm-3 col-form-label">Montant (Ar) </label>
               <div class="col-sm-12">
-                <input type="text" class="form-control">
+                <input type="number" name ="Montant" class="form-control">
               </div>
             </div>
             
             <div class="row mb-3">
-                <label for="inputNumber" class="col-sm-4 col-form-label">Montant</label>
-                <div class="col-sm-10">
-                  <input type="number" class="form-control">
+                <label for="inputNumber" class="col-sm-4 col-form-label">Date paiement</label>
+                <div class="col-sm-12">
+                  <input type="date" name ="Date" class="form-control">
                 </div>
               </div>
  
@@ -72,35 +80,36 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Liste des membres</h5>
+              <h5 class="card-title">Liste des engalia</h5>
               <!-- table -->
               <!-- Table with stripped rows -->
               <table class="table datatable">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Position</th>
-                    <th scope="col">Age</th>
-                    <th scope="col">Start Date</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Montant</th>
+                    <th scope="col">Date paiement</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
+                <?php foreach($engalia as $m):?>
                   <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
+                    
+                    <td><?= $m->ID_engalia ?></td>
+                    <td><?= $m->Nom?></td>
+                    <td><?= $m->Prenom?></td>
+                    <td><?= $m->Montant ?> Ar</td>
+                    <td><?= $m->Date ?></td>
+                    
+                    
+                    <td>
+                    <a href="<?php echo base_url().'index.php/vm_controller/engalia/modifier/'.$m->ID_engalia;?>"><button type="button" class="btn btn-outline-primary"><i class="bi bi-box-arrow-in-down-left"></i></button></a>
+                    <a href="<?php echo base_url().'index.php/vm_controller/engalia/supprimer/'.$m->ID_engalia;?>" onclick="return confirm('Confirmez-vous la suppression ?')"><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button></a></td>
                   </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Bridie Kessler</td>
-                    <td>Developer</td>
-                    <td>35</td>
-                    <td>2014-12-05</td>
-                  </tr>
-                  
+                  <?php endforeach ?>
                 </tbody>
               </table>
 
