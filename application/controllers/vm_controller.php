@@ -40,23 +40,24 @@ public function sazy($action = null, $ID_sazy = null){
     $data['membre'] = $this->vm_model->membre(); // ajouter ça
 
     // Ajouter une sazy
-    if ($this->input->post('action') == 'add') {
-        $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
-        $this->form_validation->set_rules('Observation', 'Observation', 'required');
-        $this->form_validation->set_rules('Date', 'Date', 'required|numeric');
+if ($this->input->post('action') == 'add') {
+    $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
+    $this->form_validation->set_rules('Observation', 'Observation', 'required');
+    $this->form_validation->set_rules('Date', 'Date', 'required');
 
-        if ($this->form_validation->run()) {
-            $formArray = array(
-                'Montant' => $this->input->post('Montant'),
-                'Observation' => $this->input->post('Observation'),
-                'Date' => $this->input->post('Date'),
-                'ID_membre' => $this->input->post('ID_membre')
-            );
-            $this->vm_model->ajout_sazy($formArray);
-            $this->session->set_flashdata('success', 'sazy ajoutée avec succès');
-            redirect(base_url('index.php/vm_controller/sazy'));
-        }
+    if ($this->form_validation->run()) {
+        $formArray = array(
+            'Montant' => $this->input->post('Montant'),
+            'Observation' => $this->input->post('Observation'),
+            'Date' => $this->input->post('Date'),
+            'ID_membre' => $this->input->post('ID_membre')
+        );
+
+        $this->vm_model->ajout_sazy($formArray);
+        $this->session->set_flashdata('success', 'Sazy ajoutée avec succès');
+        redirect(base_url('index.php/vm_controller/sazy'));
     }
+}
 
     // Modifier une sazy
     if ($this->input->post('action') == 'update') {
