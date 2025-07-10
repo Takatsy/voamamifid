@@ -11,8 +11,17 @@ class vm_controller extends CI_Controller {
     }
 
 public function index(){
+    $this->load->model('Vm_model');
 
-	$this->load->view('accueil_view.php');
+        $data['total_membre'] = $this->Vm_model->total_membre();
+        $data['total_part'] = $this->Vm_model->total_part();
+        $data['total_sazy'] = $this->Vm_model->total_sazy();
+        $data['total_pret'] = $this->Vm_model->total_pret();
+        $data['total_cotisation'] = $this->Vm_model->total_cotisation();
+
+        $data['solde_total'] = $data['total_part'] + $data['total_cotisation'] + $data['total_sazy'] - $data['total_pret'];
+
+        $this->load->view('accueil_view', $data);
 }
 
 public function sazy($action = null, $ID_sazy = null){

@@ -195,6 +195,35 @@ class Vm_model extends CI_Model {
         $this->db->update('pret', $data);
     } 
 
+
+    public function total_membre() {
+        return $this->db->count_all('membre');
+    }
+
+    public function total_part() {
+        $this->db->select('SUM(Nbr_anjara * Montant) AS Montant');
+        $query = $this->db->get('anjara');
+        return $query->row()->Montant;
+    }
+    
+
+    public function total_sazy() {
+        $this->db->select_sum('Montant');
+        $query = $this->db->get('sazy');
+        return $query->row()->Montant;
+    }
+
+    public function total_pret() {
+        $this->db->select_sum('Montant');
+        $query = $this->db->get('pret');
+        return $query->row()->Montant;
+    }
+    public function total_cotisation() {
+        $this->db->select_sum('Montant');
+        $query = $this->db->get('cotisation');
+        return $query->row()->Montant;
+    }
+
 }
     
 ?>
