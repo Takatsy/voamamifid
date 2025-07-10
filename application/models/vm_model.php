@@ -116,6 +116,85 @@ class Vm_model extends CI_Model {
         $this->db->where('ID_engalia', $ID_engalia);
         $this->db->update('engalia', $data);
     } 
+
+    //////////////////anjara//////////////
+    public function anjara() {
+        
+        $query = $this->db->query("SELECT ID_anjara,Montant,Date_reunion,Nbr_anjara, membre.Nom, membre.Prenom, Montant*Nbr_anjara AS Total FROM membre, anjara WHERE membre.ID_membre= anjara.ID_membre " );
+        return $query->result();  // renvoie un tableau d'objets
+    }
+
+    public function ajout_anjara($data) {
+        $this->db->insert('anjara', $data);
+    }
+
+    public function delete_anjara($ID_anjara) {
+        $this->db->where('ID_anjara', $ID_anjara);
+        $this->db->delete('anjara');
+    }
+
+    public function get_anjara($ID_anjara) {
+        $query = $this->db->query("SELECT * FROM membre, anjara WHERE membre.ID_membre= anjara.ID_membre and anjara.ID_anjara = '$ID_anjara' ");
+        return $query->row();  // renvoie un tableau d'objets
+    }
+
+    public function update_anjara($ID_anjara, $data) {
+        $this->db->where('ID_anjara', $ID_anjara);
+        $this->db->update('anjara', $data);
+    } 
+
+    ////////sazy///////////////
+    public function sazy() {
+        
+        $query = $this->db->query("SELECT * FROM membre, sazy WHERE membre.ID_membre= sazy.ID_membre " );
+        return $query->result();  // renvoie un tableau d'objets
+    }
+
+    public function ajout_sazy($data) {
+        $this->db->insert('sazy', $data);
+    }
+
+    public function delete_sazy($ID_sazy) {
+        $this->db->where('ID_sazy', $ID_sazy);
+        $this->db->delete('sazy');
+    }
+
+    public function get_sazy($ID_sazy) {
+        $query = $this->db->query("SELECT * FROM membre, sazy WHERE membre.ID_membre= sazy.ID_membre and sazy.ID_sazy = '$ID_sazy' ");
+        return $query->row();  // renvoie un tableau d'objets
+    }
+
+    public function update_sazy($ID_sazy, $data) {
+        $this->db->where('ID_sazy', $ID_sazy);
+        $this->db->update('sazy', $data);
+    } 
+    ////////pret/////
+
+    public function pret() {
+        
+        $query = $this->db->query("SELECT ID_pret,Montant,Date_pret, membre.Nom, membre.Prenom FROM membre, pret WHERE membre.ID_membre= pret.ID_membre " );
+        return $query->result();  // renvoie un tableau d'objets
+    }
+
+    public function ajout_pret($data) {
+        $this->db->insert('pret', $data);
+    }
+
+    public function delete_pret($ID_pret) {
+        $this->db->where('ID_pret', $ID_pret);
+        $this->db->delete('pret');
+    }
+
+    public function get_pret($ID_pret) {
+        $query = $this->db->query("SELECT * FROM membre, pret WHERE membre.ID_membre= pret.ID_membre and pret.ID_pret = '$ID_pret' ");
+        return $query->row();  // renvoie un tableau d'objets
+    }
+
+    public function update_pret($ID_pret, $data) {
+        $this->db->where('ID_pret', $ID_pret);
+        $this->db->update('pret', $data);
+    } 
+
 }
     
 ?>

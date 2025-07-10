@@ -13,16 +13,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <main id="main" class="main">
 
 <div class="pagetitle">
-  <h1>Form Elements</h1>
+  <h1>VOAMAMY</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Membre</a></li>
-      <li class="breadcrumb-item">Formulaire</li>
+      <li class="breadcrumb-item"><a href="<?php echo base_url().'index.php/vm_controller/index'; ?>">Acceuil</a></li>
       <li class="breadcrumb-item active">Membre</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
-  <main id="main" class="main">
+  
 
     <div class="pagetitle">
 
@@ -35,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Modifier le membre</h5>
+              <h5 class="card-title">Modification membre</h5>
 
               <!-- Vertical Form -->
               <form method="post" action="<?= base_url('index.php/vm_controller/membre') ?>">
@@ -66,8 +65,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       </div>
     </section>
 
-  </main><!-- End #main -->
-
+  
   
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

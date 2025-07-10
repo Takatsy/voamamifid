@@ -12,23 +12,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <main id="main" class="main">
 
 <div class="pagetitle">
-  <h1>Form Elements</h1>
+  <h1>VOAMAMY</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">cotisation</a></li>
-      <li class="breadcrumb-item">Formulaire</li>
-      <li class="active">Mission</li>
+      <li class="breadcrumb-item"><a href="<?php echo base_url().'index.php/vm_controller/index'; ?>">Accueil</a></li>
+      
+      <li class="breadcrumb-item active">Cotisation</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
 
 <section class="section">
-  <div class="row">
-    <div class="col-lg-6">
+  
 
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Tous les cotisations</h5>
+          <h5 class="card-title">Nouvelle cotisation</h5>
 
           <!-- General Form Elements -->
           <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/cotisation'; ?>">
@@ -50,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="row mb-3">
                 <label for="inputNumber" class="col-sm-4 col-form-label">Montant (Ar)</label>
                 <div class="col-sm-12">
-                  <input type="number" name ="Montant" class="form-control" placeholder ="Montant à payer">
+                  <input type="number" name="Montant" class="form-control" placeholder ="Montant à payer">
                 </div>
               </div>
               <div class="row mb-3">
@@ -72,12 +71,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </form><!-- End General Form Elements -->
         
         </div>
-      </div>
+      
 
     </div>
 
     <!-- autre  -->
-    <div class="col-lg-6">
+    
 
           <div class="card">
             <div class="card-body">
@@ -119,7 +118,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
 
         </div>
-  </div>
+  
 </section>
 
 </main><!-- End #main -->

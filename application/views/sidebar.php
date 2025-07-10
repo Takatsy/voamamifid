@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Accueil - NiceAdmin Bootstrap Template</title>
+  <title>voamamy</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -53,26 +53,31 @@
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/membre/';?>">
           <i class="bx bxs-group"></i><span>Membre</span>
         </a>
-        
       </li>
-      
       <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/cotisation';?>">
           <i class="bx bx-command"></i><span>Cotisation</span>
         </a>
-        
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/engalia';?>">
           <i class="bx bx-accessibility bx-accessibility"></i><span>Engalia</span>
         </a>
-        
+      </li> -->
+       <li class="nav-item">
+        <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/anjara';?>">
+          <i class="ri-open-arm-fill"></i><span>Anjara</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/sazy';?>">
+          <i class="ri-open-arm-fill"></i><span>Sazy</span>
+        </a>
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/pret';?>">
           <i class="bx bx-euro"></i><span>Prêt</span>
         </a>
-        
       </li><!-- End Components Nav -->
 
       <!-- End Forms Nav -->
@@ -83,7 +88,7 @@
 
       
 
-      <li class="nav-heading">Pages</li>
+      <li class="nav-heading">Paramettre</li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/profil';?>">

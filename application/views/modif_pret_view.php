@@ -12,52 +12,51 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <main id="main" class="main">
 
 <div class="pagetitle">
-  <h1>VOAMAMY</h1>
+<h1>VOAMAMY</h1>
   <nav>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="<?php echo base_url().'index.php/vm_controller/index'; ?>">Accueil</a></li>
       
-      <li class="breadcrumb-item active">Cotisation</li>
+      <li class="breadcrumb-item active">Prêt</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
 
 <section class="section">
- 
-
+  
 
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Modification cotisation</h5>
+          <h5 class="card-title">Modification prêt</h5>
 
           <!-- General Form Elements -->
-          <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/cotisation'; ?>">
+          <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/pret'; ?>">
             <div class="row mb-3">
-                <input type="hidden" name="action" value="update">
-                <input type="hidden" name="id" value="<?= $cotisation->ID_cotisation ?>">
-              <label for="inputText" class="col-sm-2 col-form-label">Membre</label>
-              <div class="col-sm-12">
-                <select name="ID_membre" class="form-control" required>
-                  <option value="<?= $cotisation->ID_membre ?>"><?= $cotisation->Nom.' '.$cotisation->Prenom  ?></option>
-                  <?php foreach ($membre as $m): ?>
-                      <option value="<?= $m->ID_membre ?>">
-                          <?= $m->Nom.' '.$m->Prenom  ?>
-                      </option>
-                  <?php endforeach; ?>
-              </select>
-            </div>
-            </div>
-              
-            <div class="row mb-3">
-                <label for="inputNumber" class="col-sm-4 col-form-label">Montant (Ar)</label>
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="id" value="<?= $pret->ID_pret ?>">
+                <label for="inputText" class="col-sm-3 col-form-label">Membre</label>
                 <div class="col-sm-12">
-                  <input type="number" name ="Montant" class="form-control" value="<?= $cotisation->Montant ?>" placeholder ="Montant à payer">
+                    <select name="ID_membre" class="form-control" required>
+                    <option value="<?= $pret->ID_membre ?>"><?= $pret->Nom.' '.$pret->Prenom  ?></option>
+                    <?php foreach ($membre as $m): ?>
+                        <option value="<?= $m->ID_membre ?>">
+                            <?= $m->Nom ?> <?= $m->Prenom ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                </div>
+                </div>
+            
+            <div class="row mb-3">
+                <label for="inputNumber" class="col-sm-4 col-form-label">Montant</label>
+                <div class="col-sm-12">
+                  <input type="number" name="Montant"   value="<?= $pret->Montant ?>" class="form-control" placeholder="Montant à prêter" required>
                 </div>
               </div>
               <div class="row mb-3">
-                <label for="inputNumber" class="col-sm-4 col-form-label">Date paiement</label>
+                <label for="inputNumber" class="col-sm-4 col-form-label">Date du prêt</label>
                 <div class="col-sm-12">
-                  <input type="date" name="Date"class="form-control" value="<?= $cotisation->Date ?>" placeholder ="Montant à payer">
+                  <input type="date"  name="Date_pret"  value="<?= $pret->Date_pret ?>" class="form-control" required>
                 </div>
               </div>
  
@@ -66,19 +65,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <label class="col-sm-2 col-form-label"></label>
               <div class="col-sm-12">
               <button type="submit" id="submit"  name="submit" class="btn btn-primary">Modifier</button>
-                    <a href="<?php echo base_url().'index.php/vm_controller/cotisation'; ?>" class="btn btn-danger">Annuler</a>
+                    <a href="<?php echo base_url().'index.php/vm_controller/pret'; ?>" class="btn btn-danger">Annuler</a>
               </div>
             </div>
 
           </form><!-- End General Form Elements -->
         
         </div>
-      
+      </div>
 
-  
+    
 
     <!-- autre  -->
    
+
+          
+        
+  </div>
 </section>
 
 </main><!-- End #main -->

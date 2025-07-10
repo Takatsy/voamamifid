@@ -15,6 +15,67 @@ public function index(){
 	$this->load->view('accueil_view.php');
 }
 
+public function sazy($action = null, $ID_sazy = null){
+
+    $this->load->model('vm_model');
+    $data = [];
+
+    // Supprimer une sazy
+    if ($action == 'supprimer' && !empty($ID_sazy)) {
+        $this->vm_model->delete_sazy($ID_sazy);
+        $this->session->set_flashdata('success', 'Sazy supprimée avec succès');
+        redirect(base_url('index.php/vm_controller/sazy'));
+    }
+
+    // Formulaire de sazy
+    if ($action === 'modifier' && !empty($ID_sazy)) {
+        $data['sazy'] = $this->vm_model->get_sazy($ID_sazy);
+        $data['membre'] = $this->vm_model->membre();
+        $this->load->view('modif_sazy_view', $data);
+        return;
+    }
+
+    // Lire toutes les sazy
+    $data['sazy'] = $this->vm_model->sazy();
+    $data['membre'] = $this->vm_model->membre(); // ajouter ça
+
+    // Ajouter une sazy
+    if ($this->input->post('action') == 'add') {
+        $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
+        $this->form_validation->set_rules('Observation', 'Observation', 'required');
+        $this->form_validation->set_rules('Date', 'Date', 'required|numeric');
+
+        if ($this->form_validation->run()) {
+            $formArray = array(
+                'Montant' => $this->input->post('Montant'),
+                'Observation' => $this->input->post('Observation'),
+                'Date' => $this->input->post('Date'),
+                'ID_membre' => $this->input->post('ID_membre')
+            );
+            $this->vm_model->ajout_sazy($formArray);
+            $this->session->set_flashdata('success', 'sazy ajoutée avec succès');
+            redirect(base_url('index.php/vm_controller/sazy'));
+        }
+    }
+
+    // Modifier une sazy
+    if ($this->input->post('action') == 'update') {
+        $id_update = $this->input->post('id');
+        $formArray = array(
+            'Montant' => $this->input->post('Montant'),
+            'Observation' => $this->input->post('Observation'),
+            'Date' => $this->input->post('Date'),
+            'ID_membre' => $this->input->post('ID_membre')
+        );
+        $this->vm_model->update_sazy($id_update, $formArray);
+        $this->session->set_flashdata('success', 'sazy modifiée avec succès');
+        redirect(base_url('index.php/vm_controller/sazy'));
+    }
+
+    // Vue
+    $this->load->view('sazy_view', $data);
+}
+
 
 public function engalia($action = null, $ID_engalia = null)
 {
@@ -77,29 +138,124 @@ public function engalia($action = null, $ID_engalia = null)
 
 	
 
-	public function anjara(){
-		// if(!$this->session->userdata("email")){
-		// 	return redirect( base_url('index.php/emploie/login/') );
-		// }else{
-			$this->load->model('vm_model');
-			$this->form_validation->set_rules('Montant','Montant','required');
-		
-			
-			if ($this->form_validation->run() == false) {
-				$this->load->view('acceuil.php');
-			} else {
-				$formArray = array();
-				$formArray['Montant']=$this->input->post('Montant');
-				$this->vm_model->ajout_anjara($formArray);
-				$this->session->set_flashdata('success', 'Ajout avec succes');
-				redirect(base_url().'index.php/vm_controller/index');
-			}
+	public function anjara($action = null, $ID_anjara = null){
+        $this->load->model('vm_model');
+        $data = [];
+    
+        // Supprimer une anjara
+        if ($action == 'supprimer' && !empty($ID_anjara)) {
+            $this->vm_model->delete_anjara($ID_anjara);
+            $this->session->set_flashdata('success', 'Anjara supprimée avec succès');
+            redirect(base_url('index.php/vm_controller/anjara'));
+        }
+    
+        // Formulaire de anjara
+        if ($action === 'modifier' && !empty($ID_anjara)) {
+            $data['anjara'] = $this->vm_model->get_anjara($ID_anjara);
+            $data['membre'] = $this->vm_model->membre();
+            $this->load->view('modif_anjara_view', $data);
+            return;
+        }
+    
+        // Lire toutes les anjara
+        $data['anjara'] = $this->vm_model->anjara();
+        $data['membre'] = $this->vm_model->membre(); // ajouter ça
+    
+        // Ajouter une anjara
+        if ($this->input->post('action') == 'add') {
+            $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
+            $this->form_validation->set_rules('Date_reunion', 'Date reunion', 'required');
+            $this->form_validation->set_rules('Nbr_anjara', 'Nombre anjara', 'required|numeric');
+    
+            if ($this->form_validation->run()) {
+                $formArray = array(
+                    'Montant' => $this->input->post('Montant'),
+                    'Date_reunion' => $this->input->post('Date_reunion'),
+                    'Nbr_anjara' => $this->input->post('Nbr_anjara'),
+                    'ID_membre' => $this->input->post('ID_membre')
+                );
+                $this->vm_model->ajout_anjara($formArray);
+                $this->session->set_flashdata('success', 'anjara ajoutée avec succès');
+                redirect(base_url('index.php/vm_controller/anjara'));
+            }
+        }
+    
+        // Modifier une anjara
+        if ($this->input->post('action') == 'update') {
+            $id_update = $this->input->post('id');
+            $formArray = array(
+                'Montant' => $this->input->post('Montant'),
+                'Date_reunion' => $this->input->post('Date_reunion'),
+                'Nbr_anjara' => $this->input->post('Nbr_anjara'),
+                'ID_membre' => $this->input->post('ID_membre')
+            );
+            $this->vm_model->update_anjara($id_update, $formArray);
+            $this->session->set_flashdata('success', 'engalia modifiée avec succès');
+            redirect(base_url('index.php/vm_controller/anjara'));
+        }
+    
+        // Vue
+        $this->load->view('anjara_view', $data);
 		}
 
-public function pret()
-{
-	$this->load->view('pret_view');
+public function pret($action = null, $ID_pret = null){
 	
+        $this->load->model('vm_model');
+        $data = [];
+    
+        // Supprimer un pret
+        if ($action == 'supprimer' && !empty($ID_pret)) {
+            $this->vm_model->delete_pret($ID_pret);
+            $this->session->set_flashdata('success', 'pret supprimé avec succès');
+            redirect(base_url('index.php/vm_controller/pret'));
+        }
+    
+        // Formulaire de modification
+        if ($action === 'modifier' && !empty($ID_pret)) {
+            $data['pret'] = $this->vm_model->get_pret($ID_pret);
+            $data['membre'] = $this->vm_model->pret();
+            $this->load->view('modif_pret_view', $data);
+            return;
+        }
+    
+        // Lire tous les pret
+        $data['membre'] = $this->vm_model->membre();
+        $data['pret'] = $this->vm_model->pret();
+    
+        // Ajouter un pret
+        if ($this->input->post('action') == 'add') {
+            $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
+            $this->form_validation->set_rules('Date_pret', 'Date du pret', 'required');
+        
+    
+            if ($this->form_validation->run()) {
+                $formArray = array(
+                    'Montant' => $this->input->post('Montant'),
+                    'Date_pret' => $this->input->post('Date_pret'),
+                    'ID_membre' => $this->input->post('ID_membre')
+                );
+                $this->vm_model->ajout_pret($formArray);
+                $this->session->set_flashdata('success', 'pret ajouté avec succès');
+                redirect(base_url('index.php/vm_controller/pret'));
+            }
+        }
+    
+        // Modifier un pret
+        if ($this->input->post('action') == 'update') {
+            $id_update = $this->input->post('id');
+            $formArray = array(
+                'Montant' => $this->input->post('Montant'),
+                'Date_pret' => $this->input->post('Date_pret'),
+                'ID_membre' => $this->input->post('ID_membre')
+            );
+            $this->vm_model->update_pret($id_update, $formArray);
+            $this->session->set_flashdata('success', 'pret modifié avec succès');
+            redirect(base_url('index.php/vm_controller/pret'));
+        }
+    
+        // Vue
+        $this->load->view('pret_view', $data);
+    	
 }
 public function profil()
 {
@@ -226,49 +382,5 @@ public function cotisation($action = null, $ID_cotisation = null) {
     $this->load->view('cotisation_view', $data);
 }
 
-	
 
-public function mission(){
-		// if(!$this->session->userdata("email")){
-		// 	return redirect( base_url('index.php/emploie/login/') );
-		// }else{
-
-			$this->form_validation->set_rules('Nbrjours','Nbrjours','required');
-		
-			
-			if ($this->form_validation->run() == false) {
-				$this->load->view('acceuil.php');
-			} else {
-				$formArray = array();
-				$formArray['Nbrjours']=$this->input->post('Nbrjours');
-				$this->vm_model->ajout_mission($formArray);
-				$this->session->set_flashdata('success', 'Ajout avec succes');
-				redirect(base_url().'index.php/vm_controller/index');
-			}
-		}
-		public function reunion(){
-			// if(!$this->session->userdata("email")){
-			// 	return redirect( base_url('index.php/emploie/login/') );
-			// }else{
-	
-				$this->form_validation->set_rules('ID_membre','Membre','required');
-				$this->form_validation->set_rules('ID_anjara','anjara','required');
-				$this->form_validation->set_rules('Nbranjara','Nombre anjara','required');
-				$this->form_validation->set_rules('Date_reunion','date reunion','required');
-			
-				
-				if ($this->form_validation->run() == false) {
-					$this->load->view('acceuil.php');
-				} else {
-					$formArray = array();
-					$formArray['ID_membre']=$this->input->post('ID_membre');
-					$formArray['ID_anjara']=$this->input->post('ID_anjara');
-					$formArray['Nbranjara']=$this->input->post('Nbranjara');
-					$formArray['Date_reunion']=$this->input->post('Date_reunion');
-					$this->vm_model->ajout_reunion($formArray);
-					$this->session->set_flashdata('success', 'Ajout avec succes');
-					redirect(base_url().'index.php/vm_controller/index');
-				}
-			}
-	
 }

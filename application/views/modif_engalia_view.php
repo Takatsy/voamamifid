@@ -12,23 +12,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <main id="main" class="main">
 
 <div class="pagetitle">
-  <h1>Form Elements</h1>
+  <h1>VOAMAMY</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Engalia</a></li>
-      <li class="breadcrumb-item">Formulaire</li>
+      <li class="breadcrumb-item"><a href="<?php echo base_url().'index.php/vm_controller/index'; ?>">Accueil</a></li>
+      
       <li class="breadcrumb-item active">Engalia</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
 
 <section class="section">
-  <div class="row">
-    <div class="col-lg-6">
+  
 
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Tous les Engalia</h5>
+          <h5 class="card-title">Modification Engalia</h5>
 
           <!-- General Form Elements -->
           <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/engalia'; ?>">
@@ -75,11 +74,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
       </div>
 
-    </div>
-
-    <!-- autre  -->
     
-  </div>
 </section>
 
 </main><!-- End #main -->

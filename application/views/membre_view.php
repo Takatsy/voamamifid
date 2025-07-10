@@ -13,101 +13,52 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <main id="main" class="main">
 
 <div class="pagetitle">
-  <h1>Form Elements</h1>
+  <h1>VOAMAMY</h1>
   <nav>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Accueil</a></li>
-      <li class="breadcrumb-item">Formulaire</li>
+      <li class="breadcrumb-item"><a href="<?php echo base_url().'index.php/vm_controller/index'; ?>">Accueil</a></li>
+      
       <li class="breadcrumb-item active">Membre</li>
     </ol>
   </nav>
 </div><!-- End Page Title -->
 
 <section class="section">
-  <div class="row">
-    <div class="col-lg-6">
-
-          <!-- General Form Elements -->
-             <!-- Basic Modal -->
-          <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#basicModal">
-           ajouter les membres
-          </button>
-          <br>
-          <br>
-            <div class="modal fade" id="basicModal" tabindex="-1">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title t" id="scrollmodalLabel" style="font-weight;">Nouvelle membres</h3>
-                        <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>   
-                        
-                    </div>
-                    <div class="modal-body">
-                        <div class="modal-body form">
-                            <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/membre'; ?>">
-                              <div class="form-body">
-                                  <!-- Champ caché pour l'action -->
-                                  <input type="hidden" name="action" value="add">
-                                  <div class="row mb-3">
-                                    <label for="inputText" class="col-sm-3 col-form-label">Nom</label>
-                                    <div class="col-sm-12">
-                                      <input type="text" name="Nom" class="form-control" placeholder="Nom" required>
-                                    </div>
-                                  </div>
-                                  <div class="row mb-3">
-                                    <label for="inputText" class="col-sm-3 col-form-label">Prenom</label>
-                                    <div class="col-sm-12">
-                                      <input type="text" name="Prenom" class="form-control" placeholder="Prenom" required>
-                                    </div>
-                                  </div>
-
-
-                                  <!-- Bouton d'envoi -->
-                                  <div class="modal-footer">
-                                    <button id="" onClick="save()" type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Enregistrer</button>
-                                    <button type="submit" class="btn btn-danger" data-bs-dismiss="modal"><i class="fas fa-times"></i> Annuler</button>
-                                </div>
-                              </div>
-                          </form>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-
   
+    <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Nouvelle membre</h5>
+                             
+              <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/membre'; ?>">
+                <div class="row mb-3">
+                    <!-- Champ caché pour l'action -->
+                    <input type="hidden" name="action" value="add">
+                    <div class="row mb-3">
+                      <label for="inputText" class="col-sm-3 col-form-label">Nom</label>
+                      <div class="col-sm-12">
+                        <input type="text" name="Nom" class="form-control" placeholder="Nom" required>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="inputText" class="col-sm-3 col-form-label">Prenom</label>
+                      <div class="col-sm-12">
+                        <input type="text" name="Prenom" class="form-control" placeholder="Prenom" required>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label class="col-sm-2 col-form-label"></label>
+                      <div class="col-sm-12">
+                      <button type="submit" id="submit"  name="submit" class="btn btn-primary">Ajouter</button>
+                            <a href="" class="btn btn-danger">Annuler</a>
+                      </div>
+                    </div>
+                </div>
+            </form>        
+        </div>
     </div>
+       
 
-    <!-- 🔧 MODAL MODIFIER -->
-<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <form method="POST" action="<?= base_url('index.php/vm_controller/membre') ?>">
-      <input type="hidden" name="action" value="update">
-      <input type="hidden" name="id" id="update-id">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modifier le membre</h5>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Nom</label>
-            <input type="text" class="form-control" name="Nom" id="update-nom" required>
-          </div>
-          <div class="form-group">
-            <label>Prénom</label>
-            <input type="text" class="form-control" name="Prenom" id="update-prenom" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Enregistrer</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
+   
 
     <!-- autre  -->
 <br>
