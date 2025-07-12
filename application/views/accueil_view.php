@@ -47,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Membre <span>| Total</span></h5>
+                  <h5 class="card-title">Membre <span>| Total membres</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -55,7 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="ps-3">
                       <h6><?= $total_membre ?></h6>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      
 
                     </div>
                   </div>
@@ -82,7 +82,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                </div>
 
                <div class="card-body">
-                 <h5 class="card-title">Cotisation <span>| Total</span></h5>
+                 <h5 class="card-title">Cotisation <span>| Total cotisation</span></h5>
 
                  <div class="d-flex align-items-center">
                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -90,7 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                    </div>
                    <div class="ps-3">
                      <h6><?= $total_cotisation ?> Ar</h6>
-                     <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                     
 
                    </div>
                  </div>
@@ -117,7 +117,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Anjara <span>| Total</span></h5>
+                  <h5 class="card-title">Anjara <span>| Total anjara</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -125,7 +125,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="ps-3">
                       <h6><?= $total_part?> Ar</h6>
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      
 
                     </div>
                   </div>
@@ -150,7 +150,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Prêt <span>| Total</span></h5>
+                  <h5 class="card-title">Prêt <span>| Prêt Total </span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -158,7 +158,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="ps-3">
                       <h6><?= $total_pret ?> Ar</h6>
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      
 
                     </div>
                   </div>
@@ -183,7 +183,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Sazy <span>| Total</span></h5>
+                  <h5 class="card-title">Sazy <span>| Total sazy</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -191,7 +191,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="ps-3">
                       <h6><?= $total_sazy ?> Ar</h6>
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      
 
                     </div>
                   </div>
@@ -217,7 +217,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Solde actuel <span> | Total</span></h5>
+                  <h5 class="card-title">Solde actuel <span> | Total solde</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -225,7 +225,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="ps-3">
                       <h6><?= $solde_total ?> Ar</h6>
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      
 
                     </div>
                   </div>
