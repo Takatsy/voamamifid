@@ -80,7 +80,7 @@
         </a>
       </li><!-- End Components Nav -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/pret';?>">
+        <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/remboursement';?>">
           <i class="bx bx-euro"></i><span>Remboursement</span>
         </a>
       </li><!-- End Components Nav -->

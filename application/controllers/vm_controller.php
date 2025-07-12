@@ -267,6 +267,66 @@ public function pret($action = null, $ID_pret = null){
         $this->load->view('pret_view', $data);
     	
 }
+public function remboursement($action = null, $ID_remboursement = null){
+	
+    $this->load->model('vm_model');
+    $data = [];
+
+    // Supprimer un remboursement
+    if ($action == 'supprimer' && !empty($ID_remboursement)) {
+        $this->vm_model->delete_remboursement($ID_remboursement);
+        $this->session->set_flashdata('success', 'remboursement supprimé avec succès');
+        redirect(base_url('index.php/vm_controller/remboursement'));
+    }
+
+    // Formulaire de modification
+    if ($action === 'modifier' && !empty($ID_remboursement)) {
+        $data['remboursement'] = $this->vm_model->get_remboursement($ID_remboursement);
+        $data['membre'] = $this->vm_model->pret();
+        $this->load->view('modif_remboursement_view', $data);
+        return;
+    }
+
+    // Lire tous les remboursement
+    $data['membre'] = $this->vm_model->membre();
+    $data['pret'] = $this->vm_model->pret();
+    $data['remboursement'] = $this->vm_model->remboursement();
+
+    // Ajouter un remboursement
+    if ($this->input->post('action') == 'add') {
+        $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
+        $this->form_validation->set_rules('Date_remboursement', 'Date du remboursement', 'required');
+    
+
+        if ($this->form_validation->run()) {
+            $formArray = array(
+                'Montant' => $this->input->post('Montant'),
+                'Date_remboursement' => $this->input->post('Date_remboursement'),
+                'ID_pret' => $this->input->post('ID_pret')
+            );
+            $this->vm_model->ajout_remboursement($formArray);
+            $this->session->set_flashdata('success', 'remboursement ajouté avec succès');
+            redirect(base_url('index.php/vm_controller/remboursement'));
+        }
+    }
+
+    // Modifier un remboursement
+    if ($this->input->post('action') == 'update') {
+        $id_update = $this->input->post('id');
+        $formArray = array(
+            'Montant' => $this->input->post('Montant'),
+            'Date_remboursement' => $this->input->post('Date_remboursement'),
+            'ID_pret' => $this->input->post('ID_pret')
+        );
+        $this->vm_model->update_remboursement($id_update, $formArray);
+        $this->session->set_flashdata('success', 'remboursement modifié avec succès');
+        redirect(base_url('index.php/vm_controller/remboursement'));
+    }
+
+    // Vue
+    $this->load->view('remboursement_view', $data);
+    
+}
 public function profil()
 {
 	$this->load->view('profil_view');

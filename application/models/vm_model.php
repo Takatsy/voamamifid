@@ -194,6 +194,32 @@ class Vm_model extends CI_Model {
         $this->db->where('ID_pret', $ID_pret);
         $this->db->update('pret', $data);
     } 
+    /////////remboursement////////
+    
+    public function remboursement() {
+        
+        $query = $this->db->query("SELECT ID_remboursement,remboursement.Montant,Date_remboursement, membre.Nom, membre.Prenom FROM membre, remboursement, pret WHERE membre.ID_membre= pret.ID_membre and remboursement.ID_pret =  pret.ID_pret  " );
+        return $query->result();  // renvoie un tableau d'objets
+    }
+
+    public function ajout_remboursement($data) {
+        $this->db->insert('remboursement', $data);
+    }
+
+    public function delete_remboursement($ID_remboursement) {
+        $this->db->where('ID_remboursement', $ID_remboursement);
+        $this->db->delete('remboursement');
+    }
+
+    public function get_remboursement($ID_remboursement) {
+        $query = $this->db->query("SELECT  ID_remboursement,pret.ID_pret, remboursement.Montant,Date_remboursement, membre.Nom, membre.Prenom from membre, pret, remboursement WHERE membre.ID_membre= pret.ID_membre and remboursement.ID_pret =  pret.ID_pret and remboursement.ID_remboursement = '$ID_remboursement' ");
+        return $query->row();  // renvoie un tableau d'objets
+    }
+
+    public function update_remboursement($ID_remboursement, $data) {
+        $this->db->where('ID_remboursement', $ID_remboursement);
+        $this->db->update('remboursement', $data);
+    } 
 
 
     public function total_membre() {
