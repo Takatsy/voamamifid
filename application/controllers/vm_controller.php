@@ -227,10 +227,45 @@ public function pret($action = null, $ID_pret = null){
             $this->load->view('modif_pret_view', $data);
             return;
         }
+
+         // Formulaire de remboursement
+         if ($action === 'rembourser' && !empty($ID_pret)) {
+            $data['pret'] = $this->vm_model->get_pret($ID_pret);
+            $data['membre'] = $this->vm_model->pret();
+
+            //Obtenir le montant à rembourser
+        $data['montantrembourser'] = $this->vm_model->get_montant_a_rembourser($ID_pret); // Ajoute cette fonction si elle n’existe pas
+        
+        
+            $this->load->view('remboursement_view', $data);
+            return;
+        }
+
+        // Formulaire de historique
+    if ($action === 'historique' && !empty($ID_pret)) {
+
+        // Obtenir les infos du remboursement
+        $data['pret'] = $this->vm_model->get_pret($ID_pret);
+
+        // Obtenir le prêt lié
+        //$ID_pret = $data['remboursement']->ID_pret;
+        $data['membre'] = $this->vm_model->pret(); // Facultatif si tu veux les infos membre
+
+        //Obtenir le montant à rembourser
+        $data['montantrembourser'] = $this->vm_model->get_montant_a_rembourser($ID_pret); // Ajoute cette fonction si elle n’existe pas
+
+        $data['reste'] = $this->vm_model->get_reste_a_payer($ID_pret); // Ajoute cette fonction si elle n’existe pas
+
+        $this->load->view('historique_pret_view', $data);
+        return;
+    }
     
         // Lire tous les pret
         $data['membre'] = $this->vm_model->membre();
         $data['pret'] = $this->vm_model->pret();
+        $data['reste'] = $this->vm_model->get_reste_a_payer($ID_pret); // Ajoute cette fonction si elle n’existe pas
+        $data['montantrembourser'] = $this->vm_model->get_montant_a_rembourser($ID_pret); // Ajoute cette fonction si elle n’existe pas
+        $data['totalrembourser'] = $this->vm_model->get_total_rembourser($ID_pret);
     
         // Ajouter un pret
         if ($this->input->post('action') == 'add') {
@@ -283,9 +318,28 @@ public function remboursement($action = null, $ID_remboursement = null){
     if ($action === 'modifier' && !empty($ID_remboursement)) {
         $data['remboursement'] = $this->vm_model->get_remboursement($ID_remboursement);
         $data['membre'] = $this->vm_model->pret();
+
         $this->load->view('modif_remboursement_view', $data);
         return;
     }
+
+    // Formulaire de historique
+    if ($action === 'historique' && !empty($ID_remboursement)) {
+
+        // Obtenir les infos du remboursement
+        $data['remboursement'] = $this->vm_model->get_remboursement($ID_remboursement);
+
+        // Obtenir le prêt lié
+        $ID_pret = $data['remboursement']->ID_pret;
+        $data['membre'] = $this->vm_model->pret(); // Facultatif si tu veux les infos membre
+
+        // Obtenir le reste à payer
+        $data['reste'] = $this->vm_model->get_reste_a_payer($ID_pret); // Ajoute cette fonction si elle n’existe pas
+
+        $this->load->view('historique_remboursement_view', $data);
+        return;
+    }
+    
 
     // Lire tous les remboursement
     $data['membre'] = $this->vm_model->membre();
@@ -324,9 +378,11 @@ public function remboursement($action = null, $ID_remboursement = null){
     }
 
     // Vue
-    $this->load->view('remboursement_view', $data);
+    $this->load->view('liste_remboursement_view', $data);
     
 }
+
+
 public function profil()
 {
 	$this->load->view('profil_view');

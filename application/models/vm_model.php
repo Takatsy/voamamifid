@@ -189,6 +189,10 @@ class Vm_model extends CI_Model {
         $query = $this->db->query("SELECT * FROM membre, pret WHERE membre.ID_membre= pret.ID_membre and pret.ID_pret = '$ID_pret' ");
         return $query->row();  // renvoie un tableau d'objets
     }
+    public function get_histopret($ID_pret) {
+        $query = $this->db->query("SELECT  ID_remboursement,pret.ID_pret,pret.Date_pret,pret.Montant as Montantpret, remboursement.Montant,Date_remboursement, membre.Nom, membre.Prenom from membre, pret, remboursement WHERE membre.ID_membre= pret.ID_membre and remboursement.ID_pret =  pret.ID_pret and remboursement.ID_remboursement = '$ID_pret' ");
+        return $query->row();  // renvoie un tableau d'objets
+    }
 
     public function update_pret($ID_pret, $data) {
         $this->db->where('ID_pret', $ID_pret);
@@ -212,14 +216,62 @@ class Vm_model extends CI_Model {
     }
 
     public function get_remboursement($ID_remboursement) {
-        $query = $this->db->query("SELECT  ID_remboursement,pret.ID_pret, remboursement.Montant,Date_remboursement, membre.Nom, membre.Prenom from membre, pret, remboursement WHERE membre.ID_membre= pret.ID_membre and remboursement.ID_pret =  pret.ID_pret and remboursement.ID_remboursement = '$ID_remboursement' ");
+        $query = $this->db->query("SELECT  ID_remboursement,pret.ID_pret,pret.Date_pret,pret.Montant as Montantpret, remboursement.Montant,Date_remboursement, membre.Nom, membre.Prenom from membre, pret, remboursement WHERE membre.ID_membre= pret.ID_membre and remboursement.ID_pret =  pret.ID_pret and remboursement.ID_remboursement = '$ID_remboursement' ");
         return $query->row();  // renvoie un tableau d'objets
     }
+    
 
     public function update_remboursement($ID_remboursement, $data) {
         $this->db->where('ID_remboursement', $ID_remboursement);
         $this->db->update('remboursement', $data);
     } 
+
+    public function get_reste_a_payer($ID_pret, $taux = 10, $mois = 1)
+    {
+        // Obtenir le montant du prêt
+        $pret = $this->db->get_where('pret', ['ID_pret' => $ID_pret])->row();
+        if (!$pret) return 0;
+    
+        // Calculer le total à rembourser
+        $total_a_rembourser = $pret->Montant + ($pret->Montant * ($taux / 100) * $mois);
+    
+        // Total déjà remboursé
+        $this->db->select_sum('Montant');
+        $this->db->where('ID_pret', $ID_pret);
+        $total_rembourse = $this->db->get('remboursement')->row()->Montant ?? 0;
+    
+        // Calcul du reste
+        return $total_a_rembourser - $total_rembourse;
+    }
+    public function get_montant_a_rembourser($ID_pret, $taux = 10, $mois = 1)
+    {
+        // Obtenir le montant du prêt
+        $pret = $this->db->get_where('pret', ['ID_pret' => $ID_pret])->row();
+        if (!$pret) return 0;
+    
+        // Calculer le total à rembourser
+        return $total_a_rembourser = $pret->Montant + ($pret->Montant * ($taux / 100) * $mois);
+           
+    }
+
+    public function get_total_rembourser($ID_pret)
+    {
+        // Obtenir le montant du prêt
+        $pret = $this->db->get_where('pret', ['ID_pret' => $ID_pret])->row();
+        if (!$pret) return 0;
+    
+        // Calculer le total à rembourser
+        //$total_a_rembourser = $pret->Montant + ($pret->Montant * ($taux / 100) * $mois);
+    
+        // Total déjà remboursé
+        $this->db->select_sum('Montant');
+        $this->db->where('ID_pret', $ID_pret);
+        $total_rembourse = $this->db->get('remboursement')->row()->Montant ?? 0;
+    
+        // Calcul du reste
+        return $total_rembourser ;
+    }
+    
 
 
     public function total_membre() {

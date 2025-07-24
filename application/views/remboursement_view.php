@@ -27,29 +27,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Nouvelle rembourssement</h5>
+          <h5 class="card-title">Nouvelle remboursement</h5>
 
           <!-- General Form Elements -->
           <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/remboursement'; ?>">
             <div class="row mb-3">
               <input type="hidden" name="action" value="add">
+              <input type="hidden" name="ID_pret" value="<?= $pret->ID_pret ?>">
               <label for="inputText" class="col-sm-2 col-form-label">Membre</label>
               <div class="col-sm-12">
-                <select name="ID_pret" class="form-control" required>
-                  <option value="">Sélectionner un membre </option>
-                  <?php foreach ($pret as $m): ?>
-                      <option value="<?= $m->ID_pret ?>">
-                          <?= $m->Nom ?> <?= $m->Prenom ?>
-                      </option>
-                  <?php endforeach; ?>
-              </select>
+              <p name="" type="text" class="form-control" id="fullName" value=""> <?= $pret->Nom.' '.$pret->Prenom ?> </p>
             </div>
-            </div>
+            
             
             <div class="row mb-3">
                 <label for="inputNumber" class="col-sm-4 col-form-label">Montant</label>
                 <div class="col-sm-12">
-                  <input type="number" name="Montant" class="form-control" placeholder="Montant à rembourser" required>
+                  <input type="number" name="Montant" class="form-control" placeholder="<?= number_format($montantrembourser, 0, ',', ' ') ?> Ar" required>
                 </div>
               </div>
               <div class="row mb-3">
@@ -63,8 +57,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="row mb-3">
               <label class="col-sm-2 col-form-label"></label>
               <div class="col-sm-12">
-              <button type="submit" id="submit"  name="submit" class="btn btn-primary">Ajouter</button>
-                    <a href="<?php echo base_url().'index.php/vm_controller/rembouresement'; ?>" class="btn btn-danger">Annuler</a>
+              <button type="submit" id="submit"  name="submit" class="btn btn-primary">Rembourser</button>
+                    <a href="<?php echo base_url().'index.php/vm_controller/remboursement'; ?>" class="btn btn-danger">Annuler</a>
               </div>
             </div>
 
@@ -78,44 +72,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- autre  -->
    
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Liste des remboursememnt</h5>
-              <!-- table -->
-              <!-- Table with stripped rows -->
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Prénom</th>
-                    <th scope="col">Montant</th>
-                    <th scope="col">Date rembouresement</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <?php foreach($remboursement as $m):?>
-                  <tr>
-                    
-                    <td><?= $m->ID_remboursement ?></td>
-                    <td><?= $m->Nom?></td>
-                    <td><?= $m->Prenom?></td>
-                    <td><?= $m->Montant ?> Ar</td>
-                    <td><?= $m->Date_remboursement?></td>
-                    
-                    
-                    <td>
-                    <a href="<?php echo base_url().'index.php/vm_controller/remboursement/modifier/'.$m->ID_remboursement;?>"><button type="button" class="btn btn-outline-primary"><i class="bi bi-box-arrow-in-down-left"></i></button></a>
-                    <a href="<?php echo base_url().'index.php/vm_controller/remboursement/supprimer/'.$m->ID_remboursement;?>" onclick="return confirm('Confirmez-vous la suppression ?')"><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button></a></td>
-                  </tr>
-                  <?php endforeach ?>
-                  
-                </tbody>
-              </table>
-
-            </div>
-          </div>
+          
 
         
   </div>

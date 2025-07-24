@@ -71,7 +71,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/sazy';?>">
-          <i class="ri-open-arm-fill"></i><span>Sazy</span>
+          <i class="bx bx-shield-x"></i><span>Sazy</span>
         </a>
       </li>
       <li class="nav-item">
@@ -81,7 +81,7 @@
       </li><!-- End Components Nav -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/remboursement';?>">
-          <i class="bx bx-euro"></i><span>Remboursement</span>
+          <i class="bx bx-been-here"></i><span>Remboursement</span>
         </a>
       </li><!-- End Components Nav -->
 
@@ -103,19 +103,19 @@
       </li><!-- End Profile Page Nav -->
 <!-- End Contact Page Nav -->
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/register';?>">
           <i class="bi bi-card-list"></i>
           <span>Register</span>
         </a>
-      </li><!-- End Register Page Nav -->
+      </li>End Register Page Nav -->
 
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/login';?>">
           <i class="bi bi-box-arrow-in-right"></i>
           <span>Login</span>
         </a>
-      </li><!-- End Login Page Nav -->
+      </li>End Login Page Nav -->
 
 
     </ul>

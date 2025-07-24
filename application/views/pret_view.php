@@ -91,6 +91,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <th scope="col">Prénom</th>
                     <th scope="col">Montant</th>
                     <th scope="col">Date prêt</th>
+                    <th scope="col">status</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
@@ -103,9 +104,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <td><?= $m->Prenom?></td>
                     <td><?= $m->Montant ?> Ar</td>
                     <td><?= $m->Date_pret?></td>
+                    <?php if ($totalrembourser == $montantrembourser): ?>
+                      <td>Payer</td>
+                        <?php else: ?>
+                          <td>encours</td>
+                        <?php endif; ?>
+                    
                     
                     
                     <td>
+                    <a href="<?php echo base_url().'index.php/vm_controller/pret/historique/'.$m->ID_pret;?>"><button type="button" class="btn btn-outline-secondary"><i class="bx bx-list-ul"></i></button></a>
                     <a href="<?php echo base_url().'index.php/vm_controller/pret/modifier/'.$m->ID_pret;?>"><button type="button" class="btn btn-outline-primary"><i class="bi bi-box-arrow-in-down-left"></i></button></a>
                     <a href="<?php echo base_url().'index.php/vm_controller/pret/supprimer/'.$m->ID_pret;?>" onclick="return confirm('Confirmez-vous la suppression ?')"><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button></a></td>
                   </tr>
