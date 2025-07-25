@@ -172,7 +172,7 @@ class Vm_model extends CI_Model {
 
     public function pret() {
         
-        $query = $this->db->query("SELECT ID_pret,Montant,Date_pret, membre.Nom, membre.Prenom FROM membre, pret WHERE membre.ID_membre= pret.ID_membre " );
+        $query = $this->db->query("SELECT ID_pret,Montant,Date_pret, Statut, membre.Nom, membre.Prenom FROM membre, pret WHERE membre.ID_membre= pret.ID_membre " );
         return $query->result();  // renvoie un tableau d'objets
     }
 
@@ -208,12 +208,31 @@ class Vm_model extends CI_Model {
 
     public function ajout_remboursement($data) {
         $this->db->insert('remboursement', $data);
+        
+
+        // Mettre à jour le statut du prêt lié
+        $ID_pret = $data['ID_pret'];
+        $this->update_statut_pret($ID_pret);
     }
 
     public function delete_remboursement($ID_remboursement) {
+        // Récupérer l'ID du prêt lié avant suppression
+        $this->db->select('ID_pret');
         $this->db->where('ID_remboursement', $ID_remboursement);
-        $this->db->delete('remboursement');
+        $remboursement = $this->db->get('remboursement')->row();
+    
+        if ($remboursement) {
+            $ID_pret = $remboursement->ID_pret;
+    
+            // Supprimer le remboursement
+            $this->db->where('ID_remboursement', $ID_remboursement);
+            $this->db->delete('remboursement');
+    
+            // Mettre à jour le statut du prêt
+            $this->update_statut_pret($ID_pret);
+        }
     }
+    
 
     public function get_remboursement($ID_remboursement) {
         $query = $this->db->query("SELECT  ID_remboursement,pret.ID_pret,pret.Date_pret,pret.Montant as Montantpret, remboursement.Montant,Date_remboursement, membre.Nom, membre.Prenom from membre, pret, remboursement WHERE membre.ID_membre= pret.ID_membre and remboursement.ID_pret =  pret.ID_pret and remboursement.ID_remboursement = '$ID_remboursement' ");
@@ -301,7 +320,66 @@ class Vm_model extends CI_Model {
         $query = $this->db->get('cotisation');
         return $query->row()->Montant;
     }
+    public function get_pret_by_id($ID_pret) {
+        return $this->db->get_where('pret', array('ID_pret' => $ID_pret))->row();
+    }
+    
+    public function get_remboursements_by_pret($ID_pret) {
+        $this->db->where('ID_pret', $ID_pret);
+        $query = $this->db->get('remboursement');
+        return $query->result();
+    }
+    
+    public function update_statut_pret($ID_pret) {
+        $pret = $this->get_pret_by_id($ID_pret);
+        $remboursements = $this->get_remboursements_by_pret($ID_pret);
+    
+        $total_rembourse = 0;
+        foreach ($remboursements as $r) {
+            $total_rembourse += $r->Montant;
+        }
+    
+        // Calculer 10% du montant du prêt
+        $seuil = 0.10 * $pret->Montant;
+    
+        if ($total_rembourse = $seuil) {
+            $this->db->where('ID_pret', $ID_pret);
+            $this->db->update('pret', ['Statut' => 'Payé']);
+        } else {
+            $this->db->where('ID_pret', $ID_pret);
+            $this->db->update('pret', ['Statut' => 'En cours']);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
 
+    public function enregistrer_ou_modifier_remboursement($data) {
+        $ID_pret = $data['ID_pret'];
+    
+        // Vérifie s'il existe déjà un remboursement
+        $this->db->where('ID_pret', $ID_pret);
+        $remboursement = $this->db->get('remboursement')->row();
+    
+        if ($remboursement) {
+            // Mise à jour
+            $this->db->where('ID_remboursement', $remboursement->ID_remboursement);
+            $this->db->update('remboursement', $data);
+        } else {
+            // Insertion
+            $this->db->insert('remboursement', $data);
+        }
+    
+        // Met à jour le statut du prêt
+        $this->update_statut_pret($ID_pret);
+    }
+    
+    
+    
 }
     
 ?>

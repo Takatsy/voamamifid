@@ -216,7 +216,7 @@ public function pret($action = null, $ID_pret = null){
         // Supprimer un pret
         if ($action == 'supprimer' && !empty($ID_pret)) {
             $this->vm_model->delete_pret($ID_pret);
-            $this->session->set_flashdata('success', 'pret supprimé avec succès');
+            $this->session->set_flashdata('delete_success', 'Suppression réussie !');
             redirect(base_url('index.php/vm_controller/pret'));
         }
     
@@ -266,7 +266,8 @@ public function pret($action = null, $ID_pret = null){
         $data['reste'] = $this->vm_model->get_reste_a_payer($ID_pret); // Ajoute cette fonction si elle n’existe pas
         $data['montantrembourser'] = $this->vm_model->get_montant_a_rembourser($ID_pret); // Ajoute cette fonction si elle n’existe pas
         $data['totalrembourser'] = $this->vm_model->get_total_rembourser($ID_pret);
-    
+        
+        
         // Ajouter un pret
         if ($this->input->post('action') == 'add') {
             $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
@@ -280,7 +281,7 @@ public function pret($action = null, $ID_pret = null){
                     'ID_membre' => $this->input->post('ID_membre')
                 );
                 $this->vm_model->ajout_pret($formArray);
-                $this->session->set_flashdata('success', 'pret ajouté avec succès');
+                $this->session->set_flashdata('add_success', 'Ajout effectué avec succès !');
                 redirect(base_url('index.php/vm_controller/pret'));
             }
         }
@@ -294,7 +295,7 @@ public function pret($action = null, $ID_pret = null){
                 'ID_membre' => $this->input->post('ID_membre')
             );
             $this->vm_model->update_pret($id_update, $formArray);
-            $this->session->set_flashdata('success', 'pret modifié avec succès');
+            $this->session->set_flashdata('update_success', 'Modification effectuée avec succès !');
             redirect(base_url('index.php/vm_controller/pret'));
         }
     
@@ -346,23 +347,26 @@ public function remboursement($action = null, $ID_remboursement = null){
     $data['pret'] = $this->vm_model->pret();
     $data['remboursement'] = $this->vm_model->remboursement();
 
-    // Ajouter un remboursement
-    if ($this->input->post('action') == 'add') {
-        $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
-        $this->form_validation->set_rules('Date_remboursement', 'Date du remboursement', 'required');
-    
+        // Ajouter ou mettre à jour un remboursement
+        if ($this->input->post('action') == 'add') {
+            $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
+            $this->form_validation->set_rules('Date_remboursement', 'Date du remboursement', 'required');
 
-        if ($this->form_validation->run()) {
-            $formArray = array(
-                'Montant' => $this->input->post('Montant'),
-                'Date_remboursement' => $this->input->post('Date_remboursement'),
-                'ID_pret' => $this->input->post('ID_pret')
-            );
-            $this->vm_model->ajout_remboursement($formArray);
-            $this->session->set_flashdata('success', 'remboursement ajouté avec succès');
-            redirect(base_url('index.php/vm_controller/remboursement'));
+            if ($this->form_validation->run()) {
+                $formArray = array(
+                    'Montant' => $this->input->post('Montant'),
+                    'Date_remboursement' => $this->input->post('Date_remboursement'),
+                    'ID_pret' => $this->input->post('ID_pret')
+                );
+
+                // Appel à la fonction unique d’ajout ou de mise à jour
+                $this->vm_model->enregistrer_ou_modifier_remboursement($formArray);
+
+                $this->session->set_flashdata('success', 'Remboursement enregistré avec succès');
+                redirect(base_url('index.php/vm_controller/remboursement'));
+            }
         }
-    }
+
 
     // Modifier un remboursement
     if ($this->input->post('action') == 'update') {

@@ -29,6 +29,8 @@
 
   <!-- Template Main CSS File -->
   <link href="<?php echo base_url().'assets/css/style.css';?>" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.5.0
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/

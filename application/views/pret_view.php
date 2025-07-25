@@ -104,18 +104,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <td><?= $m->Prenom?></td>
                     <td><?= $m->Montant ?> Ar</td>
                     <td><?= $m->Date_pret?></td>
-                    <?php if ($totalrembourser == $montantrembourser): ?>
-                      <td>Payer</td>
-                        <?php else: ?>
-                          <td>encours</td>
-                        <?php endif; ?>
-                    
-                    
-                    
                     <td>
+                      <?php if ($m->Statut == 'Payé'): ?>
+                        <span class="badge bg-success">Payé</span>
+                      <?php else: ?>
+                        <span class="badge bg-warning text-dark">En cours</span>
+                      <?php endif; ?>
+                    </td>
+                    <td>
+
+                   
                     <a href="<?php echo base_url().'index.php/vm_controller/pret/historique/'.$m->ID_pret;?>"><button type="button" class="btn btn-outline-secondary"><i class="bx bx-list-ul"></i></button></a>
                     <a href="<?php echo base_url().'index.php/vm_controller/pret/modifier/'.$m->ID_pret;?>"><button type="button" class="btn btn-outline-primary"><i class="bi bi-box-arrow-in-down-left"></i></button></a>
-                    <a href="<?php echo base_url().'index.php/vm_controller/pret/supprimer/'.$m->ID_pret;?>" onclick="return confirm('Confirmez-vous la suppression ?')"><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button></a></td>
+                    <button type="button" class="btn btn-outline-danger delete-btn" data-id="<?= $m->ID_pret ?>">
+                       <i class="bi bi-trash"></i>
+                  </button>
+                  </td>
+
                   </tr>
                   <?php endforeach ?>
                   
@@ -142,3 +147,86 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
   <!-- Template Main JS File -->
   <script src="<?php echo base_url().'assets/js/main.js';?>"></script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Sélectionne tous les boutons de suppression
+    document.querySelectorAll('.delete-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        const pretId = this.getAttribute('data-id');
+
+        Swal.fire({
+          title: 'Êtes-vous sûr ?',
+          text: "Cette action est irréversible !",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Oui, supprimer',
+          cancelButtonText: 'Annuler'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Redirection vers le lien de suppression
+            window.location.href = `<?= base_url('index.php/vm_controller/pret/supprimer/') ?>${pretId}`;
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<?php if ($this->session->flashdata('delete_success')): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Swal.fire({
+      title: 'Supprimé !',
+      text: '<?= $this->session->flashdata("delete_success"); ?>',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+  });
+</script>
+<?php endif; ?>
+<?php if ($this->session->flashdata('add_success')): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Ajout réussi',
+      text: '<?= $this->session->flashdata("add_success"); ?>',
+      confirmButtonText: 'OK'
+    });
+  });
+</script>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('update_success')): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Modification réussie',
+      text: '<?= $this->session->flashdata("update_success"); ?>',
+      confirmButtonText: 'OK'
+    });
+  });
+</script>
+<?php endif; ?>
+
+<?php if ($this->session->flashdata('error')): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Erreur',
+      text: '<?= $this->session->flashdata("error"); ?>',
+      confirmButtonText: 'OK'
+    });
+  });
+</script>
+<?php endif; ?>
+
+
+
+
+
