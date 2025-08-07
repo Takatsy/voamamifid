@@ -7,22 +7,21 @@ class vm_controller extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('vm_model');
-        $this->load->library('form_validation');
+        $this->load->library(['form_validation', 'session']);
+        $this->load->helper(['url', 'form']);
+
+        if (!$this->session->userdata('username')) {
+            // Rediriger vers login si pas connecté
+            redirect('vm_controller/login');
+        }
+        
     }
 
-public function index(){
-    $this->load->model('Vm_model');
+    public function index() {
+        $this->load->view('login_view');
+    }
 
-        $data['total_membre'] = $this->Vm_model->total_membre();
-        $data['total_part'] = $this->Vm_model->total_part();
-        $data['total_sazy'] = $this->Vm_model->total_sazy();
-        $data['total_pret'] = $this->Vm_model->total_pret();
-        $data['total_cotisation'] = $this->Vm_model->total_cotisation();
 
-        $data['solde_total'] = $data['total_part'] + $data['total_cotisation'] + $data['total_sazy'] - $data['total_pret'];
-
-        $this->load->view('accueil_view', $data);
-}
 
 public function sazy($action = null, $ID_sazy = null){
 
@@ -392,16 +391,8 @@ public function profil()
 	$this->load->view('profil_view');
 	
 }
-public function login()
-{
-	$this->load->view('login_view');
-	
-}
-public function register()
-{
-	$this->load->view('register_view');
-	
-}
+
+
 public function membre($action = null, $ID_membre = null) {
     $this->load->model('vm_model');
     $data = [];
@@ -511,6 +502,105 @@ public function cotisation($action = null, $ID_cotisation = null) {
     // Vue
     $this->load->view('cotisation_view', $data);
 }
+
+//////Register/////
+
+public function register()
+{
+    $this->load->library('form_validation');
+    $this->load->helper(['form', 'url']);
+
+    $this->form_validation->set_rules('name', 'Nom', 'required');
+    $this->form_validation->set_rules('username', 'Prénom', 'required|is_unique[users.username]');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]');
+    $this->form_validation->set_rules('password', 'Mot de passe', 'required|min_length[4]');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->load->view('register_view'); // ⚠️ mets bien le nom de ton fichier
+    } else {
+        $data = [
+            'name' => $this->input->post('name'),
+            'username' => $this->input->post('username'),
+            'email' => $this->input->post('email'),
+            'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+        ];
+
+        $this->vm_model->insert_user($data);
+
+        $this->session->set_flashdata('success', 'Compte créé avec succès. Vous pouvez maintenant vous connecter.');
+        redirect('vm_controller/login');
+    }
+}
+
+
+public function login() {
+    $this->form_validation->set_rules('username', 'Nom utilisateur', 'required');
+    $this->form_validation->set_rules('password', 'Mot de passe', 'required');
+
+    if ($this->form_validation->run() == FALSE) {
+        $this->load->view('login_view'); // ta vue login stylée
+    } else {
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
+
+        $user = $this->vm_model->get_user($username);
+
+        // // 👉 TEST DEBUG
+        // if (!$user) {
+        //     echo "Utilisateur non trouvé : " . $username;
+        //     exit;
+        // }
+
+        // // 👉 TEST DEBUG DU MOT DE PASSE HASHÉ
+        // echo "Mot de passe saisi : $password<br>";
+        // echo "Mot de passe stocké : " . $user->password . "<br>";
+
+        if ($user) {
+            if (password_verify($password, $user->password)) {
+                // Connexion réussie
+                $this->session->set_userdata([
+                    'user_id' => $user->id,
+                    'username' => $user->username,
+                    'logged_in' => true
+                ]);
+    
+                $this->session->set_flashdata('success', 'Connexion réussie');
+                redirect('vm_controller/dashboard'); // remplace par ta page d'accueil
+            } else {
+                $this->session->set_flashdata('error', 'Mot de passe incorrect');
+                redirect('vm_controller/login');
+            }
+        } else {
+            // Mauvais identifiants
+                $this->session->set_flashdata('error', 'Identifiant ou mot de passe incorrect.');
+                redirect('vm_controller/login');
+
+        }
+}
+}
+public function dashboard() {
+    if (!$this->session->userdata('logged_in')) {
+        redirect('vm_controller/login');
+    }
+    $username = $this->session->userdata('username');
+    $this->load->model('vm_model');
+
+    $data['total_membre'] = $this->vm_model->total_membre();
+    $data['total_part'] = $this->vm_model->total_part();
+    $data['total_sazy'] = $this->vm_model->total_sazy();
+    $data['total_pret'] = $this->vm_model->total_pret();
+    $data['total_cotisation'] = $this->vm_model->total_cotisation();
+
+    $data['solde_total'] = $data['total_part'] + $data['total_cotisation'] + $data['total_sazy'] - $data['total_pret'];
+
+    $this->load->view('accueil_view', $data);
+}
+
+public function logout() {
+    $this->session->sess_destroy();
+    redirect('vm_controller/login');
+}
+
 
 
 }

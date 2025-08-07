@@ -140,11 +140,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         
 
         <li class="nav-item dropdown pe-3">
+        <?php if ($this->session->userdata('username')): ?>
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src=<?php echo base_url('assets/img/profile-img.jpg')?> alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            
+              <span class="d-none d-md-block dropdown-toggle ps-2"><?= htmlspecialchars($this->session->userdata('username')) ?></span>
+            
+            
           </a><!-- End Profile Iamge Icon -->
+          <?php endif; ?>
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">

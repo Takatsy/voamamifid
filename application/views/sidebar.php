@@ -45,7 +45,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url().'index.php/vm_controller/index/';?>">
+        <a class="nav-link" href="<?php echo base_url().'index.php/vm_controller/dashboard/';?>">
           <i class="bi bi-grid"></i>
           <span>Accueil</span>
         </a>

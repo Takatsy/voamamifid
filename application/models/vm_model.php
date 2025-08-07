@@ -353,11 +353,6 @@ class Vm_model extends CI_Model {
     
     
     
-    
-    
-    
-    
-
     public function enregistrer_ou_modifier_remboursement($data) {
         $ID_pret = $data['ID_pret'];
     
@@ -377,7 +372,14 @@ class Vm_model extends CI_Model {
         // Met à jour le statut du prêt
         $this->update_statut_pret($ID_pret);
     }
-    
+    /////register////
+    public function insert_user($data) {
+        return $this->db->insert('users', $data);
+    }
+
+    public function get_user($username) {
+        return $this->db->get_where('users', ['username' => $username])->row();
+    }
     
     
 }
