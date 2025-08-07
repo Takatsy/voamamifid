@@ -114,7 +114,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <td>
 
                    
-                    <a href="<?php echo base_url().'index.php/vm_controller/pret/historique/'.$m->ID_pret;?>"><button type="button" class="btn btn-outline-secondary"><i class="bx bx-list-ul"></i></button></a>
+                    <a href="<?php echo base_url().'index.php/vm_controller/pret/historique/'.$m->ID_pret;?>"><button type="button" class="btn btn-warning"><i class="bx bx-list-ul"></i></button></a>
                     <a href="<?php echo base_url().'index.php/vm_controller/pret/modifier/'.$m->ID_pret;?>"><button type="button" class="btn btn-outline-primary"><i class="bi bi-box-arrow-in-down-left"></i></button></a>
                     <button type="button" class="btn btn-outline-danger delete-btn" data-id="<?= $m->ID_pret ?>">
                        <i class="bi bi-trash"></i>
