@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 17 juin 2025 à 13:25
--- Version du serveur : 10.6.19-MariaDB
+-- Généré le : ven. 08 août 2025 à 11:15
+-- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -104,6 +104,30 @@ CREATE TABLE `pret` (
   `ID_membre` int(10) NOT NULL,
   `Montant` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `remboursement`
+--
+-- Erreur de lecture de structure pour la table voamami.remboursement : #1932 - Table 'voamami.remboursement' doesn't exist in engine
+-- Erreur de lecture des données pour la table voamami.remboursement : #1064 - Erreur de syntaxe près de 'FROM `voamami`.`remboursement`' à la ligne 1
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `sazy`
+--
+-- Erreur de lecture de structure pour la table voamami.sazy : #1932 - Table 'voamami.sazy' doesn't exist in engine
+-- Erreur de lecture des données pour la table voamami.sazy : #1064 - Erreur de syntaxe près de 'FROM `voamami`.`sazy`' à la ligne 1
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+-- Erreur de lecture de structure pour la table voamami.users : #1932 - Table 'voamami.users' doesn't exist in engine
+-- Erreur de lecture des données pour la table voamami.users : #1064 - Erreur de syntaxe près de 'FROM `voamami`.`users`' à la ligne 1
 
 --
 -- Index pour les tables déchargées
