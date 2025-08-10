@@ -183,6 +183,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="card-body">
+                  <h5 class="card-title">Interêt <span>| Interêt Total </span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6><?= $total_interet ?> Ar</h6>
+                      
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
                   <h5 class="card-title">Sazy <span>| Total sazy</span></h5>
 
                   <div class="d-flex align-items-center">
@@ -261,48 +294,64 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <div id="reportsChart"></div>
 
                   <script>
-                  document.addEventListener("DOMContentLoaded", () => {
-                          const options = {
+                    document.addEventListener("DOMContentLoaded", () => {
+                        const options = {
                             series: [{
-                              name: 'Montants',
-                              data: [
-                                <?= $total_part ?>,
-                                <?= $total_cotisation ?>,
-                                <?= $total_sazy ?>,
-                                <?= $total_pret ?>,
-                                <?= $solde_total ?>
-                              ]
+                                name: 'Montants',
+                                data: [
+                                    <?= $total_part ?>,
+                                    <?= $total_cotisation ?>,
+                                    <?= $total_sazy ?>,
+                                    <?= $total_interet ?>,
+                                    <?= $total_pret ?>,
+                                    <?= $solde_total ?>
+                                ]
                             }],
                             chart: {
-                              height: 350,
-                              type: 'bar'
+                                height: 350,
+                                type: 'bar'
                             },
                             plotOptions: {
-                              bar: {
-                                distributed: true,
-                                horizontal: false,
-                                columnWidth: '55%'
-                              }
+                                bar: {
+                                    distributed: true,
+                                    horizontal: false,
+                                    columnWidth: '55%'
+                                }
                             },
-                            colors: ['#00E396', '#FEB019', '#FF4560', '#775DD0', '#546E7A'], // une couleur en moins
+                            colors: [
+                                '#00E396', // Anjara
+                                '#FEB019', // Cotisations
+                                '#FF4560', // Sazy
+                                '#008FFB', // Intérêts
+                                '#775DD0', // Prêts
+                                '#546E7A'  // Solde
+                            ],
                             dataLabels: {
-                              enabled: true
+                                enabled: true
                             },
                             xaxis: {
-                              categories: ['Anjara', 'Cotisations', 'Sazy', 'Prêts', 'Solde'], // sans 'Membres'
+                                categories: [
+                                    'Anjara',
+                                    'Cotisations',
+                                    'Sazy',
+                                    'Intérêts',
+                                    'Prêts',
+                                    'Solde'
+                                ]
                             },
                             tooltip: {
-                              y: {
-                                formatter: function (val) {
-                                  return val.toLocaleString('fr-FR') + " Ar";
+                                y: {
+                                    formatter: function (val) {
+                                        return val.toLocaleString('fr-FR') + " Ar";
+                                    }
                                 }
-                              }
                             }
-                          };
+                        };
 
-                          new ApexCharts(document.querySelector("#reportsChart"), options).render();
-                        });
-                </script>
+                        new ApexCharts(document.querySelector("#reportsChart"), options).render();
+                    });
+                    </script>
+
                   <!-- End Line Chart -->
                   
 

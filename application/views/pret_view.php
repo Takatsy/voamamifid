@@ -28,7 +28,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Nouvelle prêt</h5>
+          
+          <?php if ($this->session->flashdata('error')): ?>
+            <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: '<?php echo $this->session->flashdata('error'); ?>',
+                confirmButtonText: 'OK'
+            });
+            </script>
+            <?php endif; ?>
 
+            <?php if ($this->session->flashdata('add_success')): ?>
+            <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Succès',
+                text: '<?php echo $this->session->flashdata('add_success'); ?>',
+                confirmButtonText: 'OK'
+            });
+            </script>
+            <?php endif; ?>
           <!-- General Form Elements -->
           <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/pret'; ?>">
             <div class="row mb-3">
@@ -73,7 +94,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
       </div>
 
-    
+      
 
     <!-- autre  -->
    
@@ -225,6 +246,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   });
 </script>
 <?php endif; ?>
+
+
+
+
 
 
 

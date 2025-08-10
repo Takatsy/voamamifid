@@ -32,6 +32,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <!-- General Form Elements -->
           <form id="form" class="form-material" method="POST" action="<?php echo base_url().'index.php/vm_controller/remboursement'; ?>">
           <div class="row mb-3">
+              <input type="hidden" name="action" value="add">
+              <input type="hidden" name="ID_pret" value="<?= $pret->ID_pret ?>">
                       <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Nom et Prénom</label>
                       <div class="col-md-8 col-lg-9">
                         <p name="fullName" type="text" class="form-control" id="fullName" value=""> <?= $pret->Nom.' '.$pret->Prenom ?> </p>
@@ -93,7 +95,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="row mb-3">
                         <label class="col-sm-2 col-form-label"></label>
                         <div class="col-sm-12">
-                        <a href="<?php echo base_url().'index.php/vm_controller/pret/rembourser/'.$pret->ID_pret;?>"><button type="button" class="btn btn-primary">Rembourser</button></a>
+                        <button type="submit" id="submit"  name="submit" class="btn btn-primary">Rembourser</button>
                         <a href="<?php echo base_url().'index.php/vm_controller/pret'; ?>" class="btn btn-danger">Annuler</a>
                         </div>
                     </div>

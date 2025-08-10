@@ -270,20 +270,40 @@ public function pret($action = null, $ID_pret = null){
         // Ajouter un pret
         if ($this->input->post('action') == 'add') {
             $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
-            $this->form_validation->set_rules('Date_pret', 'Date du pret', 'required');
-        
+            $this->form_validation->set_rules('Date_pret', 'Date du prêt', 'required');
     
             if ($this->form_validation->run()) {
-                $formArray = array(
-                    'Montant' => $this->input->post('Montant'),
-                    'Date_pret' => $this->input->post('Date_pret'),
-                    'ID_membre' => $this->input->post('ID_membre')
-                );
-                $this->vm_model->ajout_pret($formArray);
-                $this->session->set_flashdata('add_success', 'Ajout effectué avec succès !');
-                redirect(base_url('index.php/vm_controller/pret'));
+                $montant_saisi = $this->input->post('Montant');
+    
+                // Récupération du solde actuel
+                $total_part = $this->vm_model->total_part();
+                $total_cotisation = $this->vm_model->total_cotisation();
+                $total_sazy = $this->vm_model->total_sazy();
+                $total_interet = $this->vm_model->total_interet();
+                $total_pret = $this->vm_model->total_pret();
+    
+                $solde_actuel = ($total_part + $total_cotisation + $total_sazy + $total_interet) - $total_pret;
+    
+                // Vérification si le prêt dépasse le solde
+                if ($montant_saisi > $solde_actuel) {
+                    $this->session->set_flashdata('error', 'Le montant demandé dépasse le solde actuel disponible.');
+                    redirect(base_url('index.php/vm_controller/pret'));
+                } else {
+                    // Enregistrement du prêt
+                    $formArray = array(
+                        'Montant' => $montant_saisi,
+                        'Date_pret' => $this->input->post('Date_pret'),
+                        'ID_membre' => $this->input->post('ID_membre')
+                    );
+                    $this->vm_model->ajout_pret($formArray);
+    
+                    $this->session->set_flashdata('add_success', 'Prêt ajouté avec succès !');
+                    redirect(base_url('index.php/vm_controller/pret'));
+                }
             }
         }
+    
+  
     
         // Modifier un pret
         if ($this->input->post('action') == 'update') {
@@ -347,25 +367,43 @@ public function remboursement($action = null, $ID_remboursement = null){
     $data['remboursement'] = $this->vm_model->remboursement();
 
         // Ajouter ou mettre à jour un remboursement
+        // Ajouter un remboursement automatiquement
         if ($this->input->post('action') == 'add') {
-            $this->form_validation->set_rules('Montant', 'Montant', 'required|numeric');
-            $this->form_validation->set_rules('Date_remboursement', 'Date du remboursement', 'required');
 
-            if ($this->form_validation->run()) {
+            $ID_pret = $this->input->post('ID_pret');
+            $pret = $this->vm_model->get_pret_by_id($ID_pret); // Récupérer le prêt
+        
+            if ($pret) {
+                // Calcul du montant remboursement (prêt + 10%)
+                $montant_remboursement = $pret->Montant + ($pret->Montant * 0.10);
+        
+                // Préparation données remboursement
                 $formArray = array(
-                    'Montant' => $this->input->post('Montant'),
-                    'Date_remboursement' => $this->input->post('Date_remboursement'),
-                    'ID_pret' => $this->input->post('ID_pret')
+                    'Montant' => $montant_remboursement,
+                    'Date_remboursement' => date('Y-m-d'),
+                    'ID_pret' => $ID_pret
                 );
-
-                // Appel à la fonction unique d’ajout ou de mise à jour
+        
+                // Enregistrement remboursement
                 $this->vm_model->enregistrer_ou_modifier_remboursement($formArray);
-
-                $this->session->set_flashdata('success', 'Remboursement enregistré avec succès');
+        
+                // Préparation données intérêt (10% du prêt)
+                $interetData = array(
+                    'ID_pret' => $ID_pret,
+                    'Montant' => $pret->Montant * 0.10,
+                    'Date_creation' => date('Y-m-d')
+                );
+        
+                // Enregistrement intérêt dans la table interet
+                $this->vm_model->ajouter_interet($interetData);
+        
+                $this->session->set_flashdata('success', 'Remboursement et intérêt ajoutés automatiquement avec succès');
+                redirect(base_url('index.php/vm_controller/remboursement'));
+            } else {
+                $this->session->set_flashdata('error', 'Prêt introuvable');
                 redirect(base_url('index.php/vm_controller/remboursement'));
             }
         }
-
 
     // Modifier un remboursement
     if ($this->input->post('action') == 'update') {
@@ -589,9 +627,10 @@ public function dashboard() {
     $data['total_part'] = $this->vm_model->total_part();
     $data['total_sazy'] = $this->vm_model->total_sazy();
     $data['total_pret'] = $this->vm_model->total_pret();
+    $data['total_interet'] = $this->vm_model->total_interet();
     $data['total_cotisation'] = $this->vm_model->total_cotisation();
 
-    $data['solde_total'] = $data['total_part'] + $data['total_cotisation'] + $data['total_sazy'] - $data['total_pret'];
+    $data['solde_total'] = $data['total_part'] + $data['total_cotisation'] + $data['total_sazy'] + $data['total_interet'] - $data['total_pret'];
 
     $this->load->view('accueil_view', $data);
 }

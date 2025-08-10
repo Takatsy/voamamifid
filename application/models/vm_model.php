@@ -309,9 +309,15 @@ class Vm_model extends CI_Model {
         $query = $this->db->get('sazy');
         return $query->row()->Montant;
     }
+    public function total_interet() {
+        $this->db->select_sum('Montant');
+        $query = $this->db->get('interet');
+        return $query->row()->Montant;
+    }
 
     public function total_pret() {
         $this->db->select_sum('Montant');
+        $this->db->where('statut !=', 'payé');  // Tous sauf ceux où statut = payé
         $query = $this->db->get('pret');
         return $query->row()->Montant;
     }
@@ -379,6 +385,43 @@ class Vm_model extends CI_Model {
 
     public function get_user($username) {
         return $this->db->get_where('users', ['username' => $username])->row();
+    }
+    public function ajouter_interet($data) {
+        return $this->db->insert('interet', $data);
+    }
+    public function get_total_part($ID_membre) {
+        $this->db->select_sum('Montant');
+        $this->db->where('ID_membre', $ID_membre);
+        $query = $this->db->get('part');
+        return $query->row()->Montant ?? 0;
+    }
+    
+    public function get_total_cotisation($ID_membre) {
+        $this->db->select_sum('Montant');
+        $this->db->where('ID_membre', $ID_membre);
+        $query = $this->db->get('cotisation');
+        return $query->row()->Montant ?? 0;
+    }
+    
+    public function get_total_sazy($ID_membre) {
+        $this->db->select_sum('Montant');
+        $this->db->where('ID_membre', $ID_membre);
+        $query = $this->db->get('sazy');
+        return $query->row()->Montant ?? 0;
+    }
+    
+    public function get_total_interet($ID_membre) {
+        $this->db->select_sum('Montant');
+        $this->db->where('ID_membre', $ID_membre);
+        $query = $this->db->get('interet');
+        return $query->row()->Montant ?? 0;
+    }
+    
+    public function get_total_pret($ID_membre) {
+        $this->db->select_sum('Montant');
+        $this->db->where('ID_membre', $ID_membre);
+        $query = $this->db->get('pret');
+        return $query->row()->Montant ?? 0;
     }
     
     
