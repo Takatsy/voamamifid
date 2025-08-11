@@ -47,14 +47,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Membre <span>| Total membres</span></h5>
+                  <h5 class="card-title">Membre <span>| <?= $total_membre ?> Membres</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-cart"></i>
                     </div>
                     <div class="ps-3">
-                      <h6><?= $total_membre ?></h6>
+                      
+                      <h6><?= $montant_annuel_membre ?> Ar</h6>
                       
 
                     </div>

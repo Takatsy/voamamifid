@@ -10,10 +10,10 @@ class vm_controller extends CI_Controller {
         $this->load->library(['form_validation', 'session']);
         $this->load->helper(['url', 'form']);
 
-        if (!$this->session->userdata('username')) {
-            // Rediriger vers login si pas connecté
-            redirect('vm_controller/login');
-        }
+        // if (!$this->session->userdata('username')) {
+        //     // Rediriger vers login si pas connecté
+        //     redirect('vm_controller/login');
+        // }
         
     }
 
@@ -617,6 +617,7 @@ public function login() {
 }
 }
 public function dashboard() {
+
     if (!$this->session->userdata('logged_in')) {
         redirect('vm_controller/login');
     }
@@ -631,6 +632,20 @@ public function dashboard() {
     $data['total_cotisation'] = $this->vm_model->total_cotisation();
 
     $data['solde_total'] = $data['total_part'] + $data['total_cotisation'] + $data['total_sazy'] + $data['total_interet'] - $data['total_pret'];
+
+    $solde_total = $this->vm_model->total_part()
+        + $this->vm_model->total_cotisation()
+        + $this->vm_model->total_sazy()
+        + $this->vm_model->total_interet()
+        - $this->vm_model->total_pret();
+
+    // Nombre total de membres
+    $nombre_membres = $this->vm_model->total_membre();
+
+    // Calculs
+    $montant_annuel_membre = ($nombre_membres > 0) ? ($solde_total / $nombre_membres) : 0;
+
+    $data['montant_annuel_membre'] = $montant_annuel_membre;
 
     $this->load->view('accueil_view', $data);
 }
