@@ -127,7 +127,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <td><?= $m->Date_pret?></td>
                     <td>
                       <?php if ($m->Statut == 'Payé'): ?>
-                        <span class="badge bg-success">Payé</span>
+                        <span class="badge bg-success">Remboursé</span>
                       <?php else: ?>
                         <span class="badge bg-warning text-dark">En cours</span>
                       <?php endif; ?>
