@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="<?php echo base_url().'assets/img/favicon.png';?>" rel="icon">
+  <link href="<?php echo base_url().'assets/img/fid.jpg';?>" rel="icon">
   <link href="<?php echo base_url().'assets/img/apple-touch-icon.png';?>" rel="apple-touch-icon">
   <!-- SweetAlert2 CDN -->
   
@@ -82,10 +82,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <!-- ✅ FORMULAIRE DE CONNEXION -->
               <form class="row g-3 needs-validation" action="<?= site_url('vm_controller/login') ?>" method="post" novalidate>
                 <div class="col-12">
-                  <label for="yourUsername" class="form-label">Nom d'utilisateur</label>
+                  <label for="yourUsername" class="form-label">Email</label>
                   <div class="input-group has-validation">
                
-                    <input type="text" name="username" class="form-control" id="yourUsername" required>
+                    <input type="text" name="email" class="form-control" id="yourUsername" required>
                     <div class="invalid-feedback">Veuillez entrer votre nom d'utilisateur.</div>
                   </div>
                 </div>

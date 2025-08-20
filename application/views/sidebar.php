@@ -10,7 +10,7 @@
   <meta content="" name="keywords">
 
  <!-- Favicons -->
- <link href="<?php echo base_url().'assets/img/favicon.png';?>" rel="icon">
+ <link href="<?php echo base_url().'assets/img/fid.jpg.png';?>" rel="icon">
   <link href="<?php echo base_url().'assets/img/apple-touch-icon.png';?>" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -95,14 +95,14 @@
 
       
 
-      <li class="nav-heading">Paramettre</li>
+      <!-- <li class="nav-heading">Paramettre</li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="<?php echo base_url().'index.php/vm_controller/profil';?>">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
-      </li><!-- End Profile Page Nav -->
+      </li>End Profile Page Nav -->
 <!-- End Contact Page Nav -->
 
       <!-- <li class="nav-item">

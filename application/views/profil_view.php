@@ -39,8 +39,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
               <img src=<?php echo base_url('assets/img/profile-img.jpg')?> alt="Profile" class="rounded-circle">
-              <h2>Kevin Anderson</h2>
-              <h3>Web Designer</h3>
+              <h2><?= htmlspecialchars($this->session->userdata('nom').' '.$this->session->userdata('prenom')) ?></h2>
+              <h3><?= htmlspecialchars($this->session->userdata('email')) ?></h3>
               <div class="social-links mt-2">
                 <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
                 <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
@@ -63,9 +63,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Profile Detailles</button>
                 </li>
 
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Modification Profile</button>
-                </li>
+                
 
                 
 
@@ -80,31 +78,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                  
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Nom et Prénom</div>
-                    <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+                    <div class="col-lg-3 col-md-4 label ">Nom </div>
+                    <div class="col-lg-9 col-md-8"><?= htmlspecialchars($this->session->userdata('nom')) ?></div>
                   </div>
 
                   
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Poste</div>
-                    <div class="col-lg-9 col-md-8">Web Designer</div>
+                    <div class="col-lg-3 col-md-4 label">Prénom</div>
+                    <div class="col-lg-9 col-md-8"><?= htmlspecialchars($this->session->userdata('prenom')) ?></div>
                   </div>
 
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Addresse</div>
-                    <div class="col-lg-9 col-md-8">A108 Adam Street, New York, NY 535022</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Telephone</div>
-                    <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
-                  </div>
-
+                  
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
+                    <div class="col-lg-9 col-md-8"><?= htmlspecialchars($this->session->userdata('email')) ?></div>
                   </div>
 
                 </div>
@@ -116,7 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                       <div class="col-md-8 col-lg-9">
-                        <img src="assets/img/profile-img.jpg" alt="Profile">
+                        <img src=<?php echo base_url('assets/img/profile-img.jpg')?> alt="Profile">
                         <div class="pt-2">
                           <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
                           <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
@@ -164,7 +152,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                                   
 
-                    <div class="text-center">
+                    <div class="col-sm-12">
                       <button type="submit" class="btn btn-primary">Enregistrer</button>
                     </div>
                   </form><!-- End Profile Edit Form -->
@@ -206,7 +194,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       </div>
                     </div>
 
-                    <div class="text-center">
+                    <div class="col-sm-12">
                       <button type="submit" class="btn btn-primary">Enregistrer</button>
                     </div>
                   </form><!-- End settings Form -->
@@ -238,8 +226,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       </div>
                     </div>
 
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Changer le Mot de passe</button>
+                    <div class="col-sm-12">
+                      <button type="submit" class="btn btn-primary">Changer </button>
                     </div>
                   </form><!-- End Change Password Form -->
 

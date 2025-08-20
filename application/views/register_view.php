@@ -56,6 +56,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <input type="text" name="name" class="form-control" id="yourName" value="<?= set_value('name') ?>" required>
                   <?= form_error('name', '<div class="text-danger small">', '</div>') ?>
                 </div>
+                <div class="col-12">
+                  <label for="yourUsername" class="form-label">Votre prénom</label>
+                  <div class="input-group has-validation">
+                   
+                    <input type="text" name="prenom" class="form-control" id="yourUsername" value="<?= set_value('prenom') ?>" required>
+                  </div>
+                  <?= form_error('username', '<div class="text-danger small">', '</div>') ?>
+                </div>
 
                 <div class="col-12">
                   <label for="yourEmail" class="form-label">Votre Email</label>
@@ -63,14 +71,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <?= form_error('email', '<div class="text-danger small">', '</div>') ?>
                 </div>
 
-                <div class="col-12">
-                  <label for="yourUsername" class="form-label">Prénom</label>
-                  <div class="input-group has-validation">
-                   
-                    <input type="text" name="username" class="form-control" id="yourUsername" value="<?= set_value('username') ?>" required>
-                  </div>
-                  <?= form_error('username', '<div class="text-danger small">', '</div>') ?>
-                </div>
+                
 
                 <div class="col-12">
                   <label for="yourPassword" class="form-label">Mot de passe</label>

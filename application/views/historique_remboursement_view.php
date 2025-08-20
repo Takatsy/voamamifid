@@ -73,7 +73,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       <div class="col-md-8 col-lg-9">
                       <p name="fullName" type="text" class="form-control" id="fullName" value=""> <?= number_format($reste, 0, ',', ' ') ?> Ar </p>
                       <?php if ($reste <= 0): ?>
-                            <p style="color: green;"><strong>✅ Prêt entièrement remboursé</strong></p>
+                            <p style="color: green;"><strong>✅ Prêt remboursé</strong></p>
                         <?php else: ?>
                             <p style="color: red;"><strong>⚠️ Il reste <?= number_format($reste, 0, ',', ' ') ?> Ar à payer</strong></p>
                         <?php endif; ?>

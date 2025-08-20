@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="<?php echo base_url().'assets/img/favicon.png';?>" rel="icon">
+  <link href="<?php echo base_url().'assets/img/fid.jpg';?>" rel="icon">
   <link href="<?php echo base_url().'assets/img/apple-touch-icon.png';?>" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -45,8 +45,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="" class="logo d-flex align-items-center">
-        <img src="" alt="">
-        <span class="d-none d-lg-block"><img src="<?php echo base_url('/assets/img/fid.jpg') ?>" alt="homepage" width="50px" style="margin"/>FID</span>
+        <img src="<?php echo base_url('/assets/img/fid.jpg') ?>" alt="homepage">
+        <span class="d-none d-lg-block">FID</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -140,12 +140,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         
 
         <li class="nav-item dropdown pe-3">
-        <?php if ($this->session->userdata('username')): ?>
+        <?php if ($this->session->userdata('prenom')): ?>
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src=<?php echo base_url('assets/img/profile-img.jpg')?> alt="Profile" class="rounded-circle">
             
-              <span class="d-none d-md-block dropdown-toggle ps-2"><?= htmlspecialchars($this->session->userdata('username')) ?></span>
+              <span class="d-none d-md-block dropdown-toggle ps-2"><?= htmlspecialchars($this->session->userdata('prenom')) ?></span>
             
             
           </a><!-- End Profile Iamge Icon -->
@@ -153,24 +153,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
+              <h6><?= htmlspecialchars($this->session->userdata('nom').' '.$this->session->userdata('prenom')) ?></h6>
+              <span><?= htmlspecialchars($this->session->userdata('email')) ?></span>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url().'index.php/vm_controller/profil'; ?>">
                 <i class="bi bi-person"></i>
-                <span>My Profile</span>
+                <span>Mon Profil</span>
               </a>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
-            <li>
+            <!-- <li>
               <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
@@ -188,12 +188,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </li>
             <li>
               <hr class="dropdown-divider">
-            </li>
+            </li> -->
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url().'index.php/vm_controller/logout'; ?>">
                 <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
+                <span>Deconnecter</span>
               </a>
             </li>
 

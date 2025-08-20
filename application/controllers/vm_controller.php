@@ -10,8 +10,7 @@ class vm_controller extends CI_Controller {
         $this->load->library(['form_validation', 'session']);
         $this->load->helper(['url', 'form']);
 
-        // if (!$this->session->userdata('username')) {
-        //     // Rediriger vers login si pas connecté
+        // if (!$this->session->userdata('logged_in')) {
         //     redirect('vm_controller/login');
         // }
         
@@ -435,11 +434,19 @@ public function membre($action = null, $ID_membre = null) {
     $this->load->model('vm_model');
     $data = [];
 
+    
+    $data['message'] = null;
+    $data['type'] = null;
+
     // Supprimer un membre
-    if ($action == 'supprimer' && !empty($ID_membre)) {
-        $this->vm_model->delete_membre($ID_membre);
-        $this->session->set_flashdata('success', 'Membre supprimé avec succès');
-        redirect(base_url('index.php/vm_controller/membre'));
+    if($action == 'supprimer' && !empty($ID_membre)) {
+        if($this->vm_model->delete_membre($ID_membre)) {
+            $data['message'] = 'Membre supprimé avec succès';
+            $data['type'] = 'success';
+        } else {
+            $data['message'] = 'Impossible de supprimer le membre';
+            $data['type'] = 'error';
+        }
     }
 
     // Formulaire de modification
@@ -548,17 +555,17 @@ public function register()
     $this->load->library('form_validation');
     $this->load->helper(['form', 'url']);
 
-    $this->form_validation->set_rules('name', 'Nom', 'required');
-    $this->form_validation->set_rules('username', 'Prénom', 'required|is_unique[users.username]');
+    $this->form_validation->set_rules('name', 'Nom', 'required|is_unique[users.nom]');
+    $this->form_validation->set_rules('prenom', 'Prénom', 'required|is_unique[users.prenom]');
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]');
-    $this->form_validation->set_rules('password', 'Mot de passe', 'required|min_length[4]');
+    $this->form_validation->set_rules('password', 'Mot de passe', 'required|min_length[8]');
 
     if ($this->form_validation->run() == FALSE) {
         $this->load->view('register_view'); // ⚠️ mets bien le nom de ton fichier
     } else {
         $data = [
-            'name' => $this->input->post('name'),
-            'username' => $this->input->post('username'),
+            'nom' => $this->input->post('name'),
+            'prenom' => $this->input->post('prenom'),
             'email' => $this->input->post('email'),
             'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
         ];
@@ -572,16 +579,16 @@ public function register()
 
 
 public function login() {
-    $this->form_validation->set_rules('username', 'Nom utilisateur', 'required');
+    $this->form_validation->set_rules('email', 'Nom utilisateur', 'required');
     $this->form_validation->set_rules('password', 'Mot de passe', 'required');
 
     if ($this->form_validation->run() == FALSE) {
         $this->load->view('login_view'); // ta vue login stylée
     } else {
-        $username = $this->input->post('username');
+        $email = $this->input->post('email');
         $password = $this->input->post('password');
 
-        $user = $this->vm_model->get_user($username);
+        $user = $this->vm_model->get_user($email);
 
         // // 👉 TEST DEBUG
         // if (!$user) {
@@ -598,7 +605,9 @@ public function login() {
                 // Connexion réussie
                 $this->session->set_userdata([
                     'user_id' => $user->id,
-                    'username' => $user->username,
+                    'nom' => $user->nom,
+                    'prenom' => $user->prenom,
+                    'email' => $user->email,
                     'logged_in' => true
                 ]);
     
@@ -621,7 +630,7 @@ public function dashboard() {
     if (!$this->session->userdata('logged_in')) {
         redirect('vm_controller/login');
     }
-    $username = $this->session->userdata('username');
+    $username = $this->session->userdata('prenom');
     $this->load->model('vm_model');
 
     $data['total_membre'] = $this->vm_model->total_membre();

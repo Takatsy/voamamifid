@@ -1,36 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-// class vm_model extends CI_model {
-//     function ajout_membre($data)
-//     {
-//         $this->db->insert('membre',$data);
-//     }
-//     function ajout_anjara($formArray)
-//     {
-//         $this->db->insert('anjara',$formArray);
-//     }
-//     function ajout_mission($formArray)
-//     {
-//         $this->db->insert('mission',$formArray);
-//     }
-//     function ajout_reunion($formArray)
-//     {
-//         $this->db->insert('reunion',$formArray);
-//     }
-
-//     function membre(){
-//         return $this->db->get('membre')->result();
-//     }
-
-//     public function delete_membre($ID_membre) {
-//         $this->db->where('ID_membre', $ID_membre);
-//         $this->db->delete('membre');
-//     }
-
-//     public function get_membre_by_id($ID_membre) {
-//         return $this->db->get_where('membre', ['ID_membre' => $ID_membre])->row();
-//     }
-
 
 class Vm_model extends CI_Model {
 
@@ -346,14 +315,14 @@ class Vm_model extends CI_Model {
         }
     
         // Calculer 10% du montant du prêt
-        $seuil = 0.10 * $pret->Montant;
+        $seuil = $pret->Montant + ($pret->Montant * 0.10);
     
         if ($total_rembourse = $seuil) {
             $this->db->where('ID_pret', $ID_pret);
             $this->db->update('pret', ['Statut' => 'Payé']);
         } else {
             $this->db->where('ID_pret', $ID_pret);
-            $this->db->update('pret', ['Statut' => 'En cours']);
+            $this->db->update('pret', ['Statut' => 'Encours']);
         }
     }
     
@@ -383,45 +352,11 @@ class Vm_model extends CI_Model {
         return $this->db->insert('users', $data);
     }
 
-    public function get_user($username) {
-        return $this->db->get_where('users', ['username' => $username])->row();
+    public function get_user($email) {
+        return $this->db->get_where('users', ['email' => $email])->row();
     }
     public function ajouter_interet($data) {
         return $this->db->insert('interet', $data);
-    }
-    public function get_total_part($ID_membre) {
-        $this->db->select_sum('Montant');
-        $this->db->where('ID_membre', $ID_membre);
-        $query = $this->db->get('part');
-        return $query->row()->Montant ?? 0;
-    }
-    
-    public function get_total_cotisation($ID_membre) {
-        $this->db->select_sum('Montant');
-        $this->db->where('ID_membre', $ID_membre);
-        $query = $this->db->get('cotisation');
-        return $query->row()->Montant ?? 0;
-    }
-    
-    public function get_total_sazy($ID_membre) {
-        $this->db->select_sum('Montant');
-        $this->db->where('ID_membre', $ID_membre);
-        $query = $this->db->get('sazy');
-        return $query->row()->Montant ?? 0;
-    }
-    
-    public function get_total_interet($ID_membre) {
-        $this->db->select_sum('Montant');
-        $this->db->where('ID_membre', $ID_membre);
-        $query = $this->db->get('interet');
-        return $query->row()->Montant ?? 0;
-    }
-    
-    public function get_total_pret($ID_membre) {
-        $this->db->select_sum('Montant');
-        $this->db->where('ID_membre', $ID_membre);
-        $query = $this->db->get('pret');
-        return $query->row()->Montant ?? 0;
     }
     
     
