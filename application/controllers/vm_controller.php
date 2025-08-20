@@ -664,6 +664,42 @@ public function logout() {
     redirect('vm_controller/login');
 }
 
+public function get_new_notifications() {
+    $last_id = $this->input->get('last_id'); // Dernier ID reçu côté client
+
+    $notifications = $this->Pret_model->get_new_notifications($last_id);
+
+    // Calculer les compteurs par catégorie
+    $compteurs = [
+        'en_retard' => 0,
+        'toujours_impaye' => 0,
+        'impaye_chronique' => 0
+    ];
+
+    foreach ($notifications as $notif) {
+        if(strpos($notif['titre'], 'En retard') !== false) {
+            $compteurs['en_retard']++;
+        } elseif(strpos($notif['titre'], 'Toujours impayé') !== false) {
+            $compteurs['toujours_impaye']++;
+        } elseif(strpos($notif['titre'], 'Impayé chronique') !== false) {
+            $compteurs['impaye_chronique']++;
+        }
+    }
+
+    // Générer les badges HTML
+    $badges_html = '';
+    if($compteurs['en_retard'] > 0) $badges_html .= '<span class="badge bg-warning">'.$compteurs['en_retard'].' 🟡</span> ';
+    if($compteurs['toujours_impaye'] > 0) $badges_html .= '<span class="badge" style="background-color:orange;">'.$compteurs['toujours_impaye'].' 🟠</span> ';
+    if($compteurs['impaye_chronique'] > 0) $badges_html .= '<span class="badge bg-danger">'.$compteurs['impaye_chronique'].' 🔴</span>';
+
+    // Retour JSON pour Ajax
+    echo json_encode([
+        'notif_count'   => count($notifications),
+        'notifications' => $notifications,
+        'badges_html'   => $badges_html
+    ]);
+}
+
 
 
 }

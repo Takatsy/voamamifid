@@ -359,6 +359,59 @@ class Vm_model extends CI_Model {
         return $this->db->insert('interet', $data);
     }
     
+    public function get_new_notifications($last_id = 0) {
+        $today = new DateTime();
+    
+        $this->db->select("pret.ID_pret, pret.date_pret, pret.statut, membre.nom, membre.prenom");
+        $this->db->from("pret");
+        $this->db->join("membre", "membre.ID_membre = pret.ID_pret");
+        $this->db->where("pret.statut !=", "paye");
+        if($last_id > 0){
+            $this->db->where("pret.ID_pret >", $last_id);
+        }
+        $prets = $this->db->get()->result();
+    
+        $notifications = [];
+    
+        foreach ($prets as $pret) {
+            $datePret = new DateTime($pret->date_pret);
+            $dateEcheance = clone $datePret;
+            $dateEcheance->modify('+1 month');
+    
+            if ($today > $dateEcheance) {
+                $interval = $dateEcheance->diff($today);
+                $moisRetard = ($interval->y * 12) + $interval->m;
+    
+                // Définir le statut et la couleur
+                if ($moisRetard == 1) {
+                    $statut = "En retard";
+                    $couleur = "text-warning";
+                    $icone = "bi bi-exclamation-circle";
+                } elseif ($moisRetard == 2) {
+                    $statut = "Toujours impayé";
+                    $couleur = "text-orange"; // classe custom
+                    $icone = "bi bi-x-circle";
+                } else {
+                    $statut = "Impayé chronique";
+                    $couleur = "text-danger";
+                    $icone = "bi bi-exclamation-triangle";
+                }
+    
+                $notifications[] = [
+                    'id'      => $pret->ID_pret,
+                    'titre'   => "Prêt n°{$pret->ID_pret} - {$statut}",
+                    'message' => "Membre: {$pret->nom} {$pret->prenom} - Échéance dépassée : {$moisRetard} mois de retard",
+                    'time'    => "Depuis le " . $dateEcheance->format('d/m/Y'),
+                    'couleur' => $couleur,
+                    'icone'   => $icone
+                ];
+            }
+        }
+    
+        return $notifications;
+    }
+    
+    
     
 }
     

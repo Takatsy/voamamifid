@@ -56,86 +56,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
+        
 
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" id="notificationDropdown">
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
+            <span class="badge bg-primary badge-number" id="notif_count">0</span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
+            
             <li>
               <hr class="dropdown-divider">
             </li>
 
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
+              <!-- Badges par catégorie -->
+              <div id="notif_badges" class="mt-1"></div>
 
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
-            </li>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications mt-2" id="notif_list">
+                <li class="dropdown-header">
+                  <span id="notif_header_text">Chargement...</span>
+                  <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                </li>
+              </ul>
+       </li>
 
           </ul><!-- End Notification Dropdown Items -->
 
-        </li><!-- End Notification Nav -->
+        <!-- End Notification Nav -->
 
         
 
@@ -215,3 +164,69 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
   <!-- Template Main JS File -->
   <script src="<?php echo base_url().'assets/js/main.js';?>"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script?>
+  let last_notif_id = 0;
+
+function loadNewNotifications() {
+    $.ajax({
+        url: '<?= base_url("dashboard/get_new_notifications") ?>',
+        method: 'GET',
+        data: { last_id: last_notif_id },
+        dataType: 'json',
+        success: function(data) {
+            // Mettre à jour le compteur global
+            $('#notif_count').text(data.notif_count);
+            $('#notif_header_text').text(`You have ${data.notif_count} new notification(s)`);
+
+            // Mettre à jour les badges par catégorie
+            $('#notif_badges').html(data.badges_html);
+
+            // Construire la liste des notifications
+            let listHTML = '';
+
+            if(data.notifications.length > 0){
+                data.notifications.forEach(function(notif){
+                    listHTML += `
+<li class="notification-item">
+    <i class="${notif.icone} ${notif.couleur}"></i>
+    <div>
+        <h4>${notif.titre}</h4>
+        <p>${notif.message}</p>
+        <p>${notif.time}</p>
+    </div>
+</li>
+<li><hr class="dropdown-divider"></li>
+                    `;
+                    if(notif.id > last_notif_id) last_notif_id = notif.id;
+                });
+            } else {
+                listHTML = `
+<li class="notification-item">
+    <i class="bi bi-check-circle text-success"></i>
+    <div>
+        <h4>Aucune notification</h4>
+        <p>Tout est à jour ✅</p>
+    </div>
+</li>
+                `;
+            }
+
+            // Supprimer l’ancien contenu sauf le header
+            $('#notif_list').find('.notification-item, .dropdown-divider').remove();
+
+            // Ajouter le nouveau contenu
+            $('#notif_list').append(listHTML);
+        },
+        error: function(xhr, status, error){
+            console.error("Erreur Ajax notifications:", error);
+        }
+    });
+}
+
+// Charger au démarrage et toutes les 15 secondes
+loadNewNotifications();
+setInterval(loadNewNotifications, 15000);
+
+</script>
