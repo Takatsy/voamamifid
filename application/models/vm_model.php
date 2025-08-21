@@ -375,6 +375,13 @@ class Vm_model extends CI_Model {
     public function get_user($email) {
         return $this->db->get_where('users', ['email' => $email])->row();
     }
+    public function get_userid($id) {
+        return $this->db->where('id', $id)->get('users')->row();
+    }
+    public function update_password($id, $new_password) {
+        return $this->db->where('id', $id)
+                        ->update('users', ['password' => $new_password]);
+    }
     public function ajouter_interet($data) {
         return $this->db->insert('interet', $data);
     }

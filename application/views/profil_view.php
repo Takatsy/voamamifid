@@ -203,33 +203,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 <div class="tab-pane fade pt-3" id="profile-change-password">
                   <!-- Change Password Form -->
-                  <form>
+                  <form method="post" action="<?= base_url('index.php/vm_controller/change_password') ?>">
 
-                    <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mot de passe actuel</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword">
-                      </div>
+                  <div class="row mb-3">
+                    <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mot de passe actuel</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="password" type="password" class="form-control" id="currentPassword" required>
                     </div>
+                  </div>
 
-                    <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Nouvelle Mot de passe</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="newpassword" type="password" class="form-control" id="newPassword">
-                      </div>
+                  <div class="row mb-3">
+                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Nouveau mot de passe</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="newpassword" type="password" class="form-control" id="newPassword" required>
                     </div>
+                  </div>
 
-                    <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-entrer le Nouvelle Mot de passe</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="renewPassword">
-                      </div>
+                  <div class="row mb-3">
+                    <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Confirmer le nouveau mot de passe</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="renewpassword" type="password" class="form-control" id="renewPassword" required>
                     </div>
+                  </div>
 
-                    <div class="col-sm-12">
-                      <button type="submit" class="btn btn-primary">Changer </button>
-                    </div>
-                  </form><!-- End Change Password Form -->
+                  <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary">Changer</button>
+                  </div>
+                </form>
+
 
                 </div>
 
@@ -258,6 +259,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
   <!-- Template Main JS File -->
   <script src="<?php echo base_url().'assets/js/main.js';?>"></script>
+  <?php if (isset($_GET['error'])): ?>
+  <script>
+    alert("<?= htmlspecialchars($_GET['error']) ?>");
+  </script>
+<?php endif; ?>
 
 </body>
 

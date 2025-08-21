@@ -755,5 +755,34 @@ public function notification() {
     $this->load->view('notification_view', $data);
 }
 
+public function change_password() {
+    $current = $this->input->post('password');
+    $new = $this->input->post('newpassword');
+    $renew = $this->input->post('renewpassword');
+    $user_id = $this->session->userdata('user_id'); // ou selon ta session
+
+    // Vérifier ancien mot de passe
+    $user = $this->vm_model->get_userid($user_id);
+
+    if (!password_verify($current, $user->password)) {
+        $error = 'Mot de passe actuel incorrect';
+        redirect('vm_controller/profil?error=' . urlencode($error));
+    }
+    
+
+    // Vérifier si les nouveaux mots de passe correspondent
+    if ($new !== $renew) {
+        $error= 'Les nouveaux mots de passe ne correspondent pas';
+        redirect('vm_controller/profil?error=' . urlencode($error));
+    }
+
+    // Mettre à jour
+    $hashed = password_hash($new, PASSWORD_DEFAULT);
+    $this->vm_model->update_password($user_id, $hashed);
+
+    $this->session->set_flashdata('success', 'Mot de passe changé avec succès ✅');
+    redirect('vm_controller/profil');
+}
+
 
 }
