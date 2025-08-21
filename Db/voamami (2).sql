@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 11 août 2025 à 07:01
+-- Généré le : jeu. 21 août 2025 à 12:42
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.0.30
 
@@ -40,7 +40,7 @@ CREATE TABLE `anjara` (
 --
 
 INSERT INTO `anjara` (`ID_anjara`, `ID_membre`, `Montant`, `Nbr_anjara`, `Date_reunion`) VALUES
-(1, 1, 2000, 5, '2025-08-10');
+(4, 16, 1346, 5, '2025-08-21');
 
 -- --------------------------------------------------------
 
@@ -60,10 +60,7 @@ CREATE TABLE `cotisation` (
 --
 
 INSERT INTO `cotisation` (`ID_cotisation`, `ID_membre`, `Montant`, `Date`) VALUES
-(1, 1, 50000, '2025-06-17'),
-(2, 2, 30000, '2025-06-17'),
-(3, 3, 20000, '2025-06-17'),
-(4, 4, 40000, '2025-06-17');
+(6, 16, 50000, '2025-08-16');
 
 -- --------------------------------------------------------
 
@@ -98,7 +95,22 @@ CREATE TABLE `interet` (
 INSERT INTO `interet` (`ID_interet`, `ID_pret`, `Montant`, `Date_creation`) VALUES
 (1, 4, 5000, '2025-08-10'),
 (2, 3, 20000, '2025-08-10'),
-(3, 6, 5000, '2025-08-10');
+(3, 6, 5000, '2025-08-10'),
+(4, 7, 20000, '2025-08-11'),
+(5, 10, 10000, '2025-08-13'),
+(6, 10, 10000, '2025-08-13'),
+(7, 11, 10000, '2025-08-13'),
+(8, 11, 10000, '2025-08-16'),
+(9, 12, 20000, '2025-08-16'),
+(10, 13, 1600, '2025-08-16'),
+(11, 17, 5000, '2025-08-21'),
+(12, 17, 5000, '2025-08-21'),
+(13, 17, 5000, '2025-08-21'),
+(14, 11, 100, '2025-08-21'),
+(15, 19, 500, '2025-08-21'),
+(16, 20, 1000, '2025-08-21'),
+(17, 19, 5000, '2025-08-21'),
+(18, 22, 3000, '2025-08-21');
 
 -- --------------------------------------------------------
 
@@ -117,10 +129,7 @@ CREATE TABLE `membre` (
 --
 
 INSERT INTO `membre` (`ID_membre`, `Nom`, `Prenom`) VALUES
-(1, 'Rafenoarivo', 'Marius'),
-(2, 'Noass', 'Mihary'),
-(3, 'setra', 'José'),
-(4, 'Dhore', 'Miha');
+(16, 'TAKATSY', 'Mihary');
 
 -- --------------------------------------------------------
 
@@ -133,17 +142,17 @@ CREATE TABLE `pret` (
   `ID_membre` int(10) NOT NULL,
   `Montant` double NOT NULL,
   `Date_pret` date NOT NULL,
-  `Statut` varchar(25) NOT NULL
+  `Statut` varchar(25) NOT NULL DEFAULT 'encours',
+  `lu` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `pret`
 --
 
-INSERT INTO `pret` (`ID_pret`, `ID_membre`, `Montant`, `Date_pret`, `Statut`) VALUES
-(3, 1, 200000, '2025-08-10', 'Payé'),
-(4, 2, 50000, '2025-08-17', 'Payé'),
-(6, 3, 50000, '2025-08-10', 'Payé');
+INSERT INTO `pret` (`ID_pret`, `ID_membre`, `Montant`, `Date_pret`, `Statut`, `lu`) VALUES
+(23, 16, 20000, '2025-04-03', 'Encours', 1),
+(24, 16, 2000, '2025-03-15', 'encours', 1);
 
 -- --------------------------------------------------------
 
@@ -163,11 +172,7 @@ CREATE TABLE `remboursement` (
 --
 
 INSERT INTO `remboursement` (`ID_remboursement`, `ID_pret`, `Montant`, `Date_remboursement`) VALUES
-(1, 1, 20000, '2025-08-10'),
-(2, 2, 20000, '2025-08-10'),
-(3, 3, 220000, '2025-08-10'),
-(4, 4, 55000, '2025-08-10'),
-(5, 6, 55000, '2025-08-10');
+(16, 19, 55000, '2025-08-21');
 
 -- --------------------------------------------------------
 
@@ -188,7 +193,8 @@ CREATE TABLE `sazy` (
 --
 
 INSERT INTO `sazy` (`ID_sazy`, `ID_membre`, `Observation`, `Montant`, `Date`) VALUES
-(1, 1, 'Mitabataba', 1000, '2025-08-10');
+(2, 15, 'Mitabataba', 1000, '2025-08-13'),
+(3, 16, 'Tara', 1000, '2025-08-21');
 
 -- --------------------------------------------------------
 
@@ -198,8 +204,8 @@ INSERT INTO `sazy` (`ID_sazy`, `ID_membre`, `Observation`, `Montant`, `Date`) VA
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `name` varchar(25) NOT NULL,
+  `prenom` varchar(100) NOT NULL,
+  `nom` varchar(25) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -208,8 +214,9 @@ CREATE TABLE `users` (
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `name`, `email`, `password`) VALUES
-(1, 'Zafisolo', 'admin', 'admin@gmail.com', '$2y$10$99tTK7iT2UVjuB9RpJ6x9eZ337VYQZNgZduvIqJa/zI6DgIoNEvNO');
+INSERT INTO `users` (`id`, `prenom`, `nom`, `email`, `password`) VALUES
+(1, 'Zafisolo', 'admin', 'admin@gmail.com', '$2y$10$99tTK7iT2UVjuB9RpJ6x9eZ337VYQZNgZduvIqJa/zI6DgIoNEvNO'),
+(2, 'dore', 'Masy', 'zaho@gmail.com', '$2y$10$j.e14csIFRXk/.bldGu.EO4UpQJqX.3SJjrXzdtaD5MwTLMWyXwTa');
 
 --
 -- Index pour les tables déchargées
@@ -275,7 +282,7 @@ ALTER TABLE `sazy`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `username` (`prenom`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
@@ -286,13 +293,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `anjara`
 --
 ALTER TABLE `anjara`
-  MODIFY `ID_anjara` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_anjara` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `cotisation`
 --
 ALTER TABLE `cotisation`
-  MODIFY `ID_cotisation` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_cotisation` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `engalia`
@@ -304,37 +311,37 @@ ALTER TABLE `engalia`
 -- AUTO_INCREMENT pour la table `interet`
 --
 ALTER TABLE `interet`
-  MODIFY `ID_interet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_interet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `membre`
 --
 ALTER TABLE `membre`
-  MODIFY `ID_membre` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_membre` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `pret`
 --
 ALTER TABLE `pret`
-  MODIFY `ID_pret` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID_pret` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT pour la table `remboursement`
 --
 ALTER TABLE `remboursement`
-  MODIFY `ID_remboursement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_remboursement` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `sazy`
 --
 ALTER TABLE `sazy`
-  MODIFY `ID_sazy` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_sazy` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Contraintes pour les tables déchargées
@@ -344,13 +351,13 @@ ALTER TABLE `users`
 -- Contraintes pour la table `anjara`
 --
 ALTER TABLE `anjara`
-  ADD CONSTRAINT `FKANJARA822870` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
+  ADD CONSTRAINT `FKANJARA822870` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `cotisation`
 --
 ALTER TABLE `cotisation`
-  ADD CONSTRAINT `FKCOTISATION401824` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
+  ADD CONSTRAINT `fk_cotisation_membre` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `engalia`
@@ -362,7 +369,7 @@ ALTER TABLE `engalia`
 -- Contraintes pour la table `pret`
 --
 ALTER TABLE `pret`
-  ADD CONSTRAINT `FKPRET86184` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`);
+  ADD CONSTRAINT `FKPRET86184` FOREIGN KEY (`ID_membre`) REFERENCES `membre` (`ID_membre`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

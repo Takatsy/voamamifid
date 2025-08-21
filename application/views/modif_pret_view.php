@@ -36,7 +36,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <input type="hidden" name="id" value="<?= $pret->ID_pret ?>">
                 <label for="inputText" class="col-sm-3 col-form-label">Membre</label>
                 <div class="col-sm-12">
-                    <select name="ID_membre" class="form-control" disabled>
+                    <select name="ID_membre" class="form-control" required>
                     <option value="<?= $pret->ID_membre ?>"><?= $pret->Nom.' '.$pret->Prenom  ?></option>
                     <?php foreach ($membre as $m): ?>
                         <option value="<?= $m->ID_membre ?>">
