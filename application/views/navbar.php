@@ -54,103 +54,88 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
     <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
+  <ul class="d-flex align-items-center">
 
-        
+    <!-- Notification Dropdown -->
+    <li class="nav-item dropdown" id="notificationDropdown">
+      <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" id="notif_bell">
+        <i class="bi bi-bell"></i>
+        <span class="badge bg-primary badge-number">
+          <?= isset($count_prets_en_retard) && $count_prets_en_retard > 0 ? $count_prets_en_retard : 0 ?>
+      </span>
+      </a>
 
-        <li class="nav-item dropdown" id="notificationDropdown">
+      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+        <li class="dropdown-header">
+          <span id="notif_header_text">
+            <?= isset($count_prets_en_retard) && $count_prets_en_retard > 0 ? 'Prêts en retard' : 'Tout est à jour ✅' ?>
+          </span>
+        <a href="<?= base_url('index.php/vm_controller/notification') ?>">
+            <span class="badge rounded-pill bg-primary p-2 ms-2">Voir tout</span>
+        </a>
+        </li>
 
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number" id="notif_count">0</span>
-          </a><!-- End Notification Icon -->
+        <li><hr class="dropdown-divider"></li>
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-              <!-- Badges par catégorie -->
-              <div id="notif_badges" class="mt-1"></div>
-
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications mt-2" id="notif_list">
-                <li class="dropdown-header">
-                  <span id="notif_header_text">Chargement...</span>
-                  <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-                </li>
-              </ul>
-       </li>
-
-          </ul><!-- End Notification Dropdown Items -->
-
-        <!-- End Notification Nav -->
-
-        
-
-        <li class="nav-item dropdown pe-3">
-        <?php if ($this->session->userdata('prenom')): ?>
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src=<?php echo base_url('assets/img/profile-img.jpg')?> alt="Profile" class="rounded-circle">
-            
-              <span class="d-none d-md-block dropdown-toggle ps-2"><?= htmlspecialchars($this->session->userdata('prenom')) ?></span>
-            
-            
-          </a><!-- End Profile Iamge Icon -->
+        <!-- Liste des notifications -->
+        <div id="notif_badges" class="mt-1">
+          <?php if (!empty($prets_en_retard)): ?>
+            <?php foreach($prets_en_retard as $pret): ?>
+              <div class="notif-item px-3 py-2 border-bottom">
+                <div> <?= htmlspecialchars($pret->nom.' '.$pret->prenom) ?></div>
+                <div>Retard : <?= $pret->mois_retard ?> mois</div>
+                <div>Prêt :</strong> <?= date('d/m/Y', strtotime($pret->Date_pret)) ?></div>
+            </div>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <div class="notif-item px-3 py-2">
+              Tout est à jour ✅
+            </div>
           <?php endif; ?>
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6><?= htmlspecialchars($this->session->userdata('nom').' '.$this->session->userdata('prenom')) ?></h6>
-              <span><?= htmlspecialchars($this->session->userdata('email')) ?></span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url().'index.php/vm_controller/profil'; ?>">
-                <i class="bi bi-person"></i>
-                <span>Mon Profil</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <!-- <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                <i class="bi bi-gear"></i>
-                <span>Account Settings</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>Need Help?</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li> -->
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="<?php echo base_url().'index.php/vm_controller/logout'; ?>">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Deconnecter</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
+        </div>
 
       </ul>
-    </nav><!-- End Icons Navigation -->
+    </li>
+    <!-- End Notification Dropdown -->
+
+    <!-- Profile Nav -->
+    <li class="nav-item dropdown pe-3">
+      <?php if ($this->session->userdata('prenom')): ?>
+      <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+        <img src="<?= base_url('assets/img/profile-img.jpg') ?>" alt="Profile" class="rounded-circle">
+        <span class="d-none d-md-block dropdown-toggle ps-2">
+          <?= htmlspecialchars($this->session->userdata('prenom')) ?>
+        </span>
+      </a>
+
+      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+        <li class="dropdown-header">
+          <h6><?= htmlspecialchars($this->session->userdata('nom').' '.$this->session->userdata('prenom')) ?></h6>
+          <span><?= htmlspecialchars($this->session->userdata('email')) ?></span>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="<?= base_url('index.php/vm_controller/profil') ?>">
+            <i class="bi bi-person"></i>
+            <span>Mon Profil</span>
+          </a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+          <a class="dropdown-item d-flex align-items-center" href="<?= base_url('index.php/vm_controller/logout') ?>">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Déconnecter</span>
+          </a>
+        </li>
+      </ul>
+      <?php endif; ?>
+    </li>
+    <!-- End Profile Nav -->
+
+  </ul>
+</nav>
+
+
 
   </header><!-- End Header -->
   <script src="<?php echo base_url().'assets/vendor/apexcharts/apexcharts.min.js';?>"></script>
@@ -166,67 +151,57 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <script src="<?php echo base_url().'assets/js/main.js';?>"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <script?>
-  let last_notif_id = 0;
+  <script>
+function loadNotifications() {
+    // Compter notifications non lues
+    $.getJSON("<?= base_url('vm_controller/count_notifications') ?>", function(data) {
+        $("#notif_count").text(data.count);
+    });
 
-function loadNewNotifications() {
-    $.ajax({
-        url: '<?= base_url("dashboard/get_new_notifications") ?>',
-        method: 'GET',
-        data: { last_id: last_notif_id },
-        dataType: 'json',
-        success: function(data) {
-            // Mettre à jour le compteur global
-            $('#notif_count').text(data.notif_count);
-            $('#notif_header_text').text(`You have ${data.notif_count} new notification(s)`);
+    // Charger la liste des notifications
+    $.getJSON("<?= base_url('vm_controller/get_notifications') ?>", function(data) {
+        let listHTML = "";
 
-            // Mettre à jour les badges par catégorie
-            $('#notif_badges').html(data.badges_html);
-
-            // Construire la liste des notifications
-            let listHTML = '';
-
-            if(data.notifications.length > 0){
-                data.notifications.forEach(function(notif){
-                    listHTML += `
-<li class="notification-item">
-    <i class="${notif.icone} ${notif.couleur}"></i>
-    <div>
-        <h4>${notif.titre}</h4>
-        <p>${notif.message}</p>
-        <p>${notif.time}</p>
-    </div>
-</li>
-<li><hr class="dropdown-divider"></li>
-                    `;
-                    if(notif.id > last_notif_id) last_notif_id = notif.id;
-                });
-            } else {
-                listHTML = `
-<li class="notification-item">
-    <i class="bi bi-check-circle text-success"></i>
-    <div>
-        <h4>Aucune notification</h4>
-        <p>Tout est à jour ✅</p>
-    </div>
-</li>
+        if(data.length > 0) {
+            data.forEach(function(notif) {
+                listHTML += `
+                    <li>
+                        <a href="#" class="dropdown-item d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle text-danger me-2"></i>
+                            <div>
+                                <p class="mb-0">${notif.message}</p>
+                                <small class="text-muted">${notif.date}</small>
+                            </div>
+                        </a>
+                        <hr class="dropdown-divider">
+                    </li>
                 `;
-            }
-
-            // Supprimer l’ancien contenu sauf le header
-            $('#notif_list').find('.notification-item, .dropdown-divider').remove();
-
-            // Ajouter le nouveau contenu
-            $('#notif_list').append(listHTML);
-        },
-        error: function(xhr, status, error){
-            console.error("Erreur Ajax notifications:", error);
+            });
+        } else {
+            // Si aucune notification
+            listHTML = `
+                <li class="text-center p-2">
+                    <i class="bi bi-check-circle me-1"></i> Aucune notification
+                </li>
+            `;
         }
+
+        $("#notif_list").html(listHTML);
     });
 }
 
-// Charger au démarrage et toutes les 15 secondes
-loadNewNotifications();
-setInterval(loadNewNotifications, 15000);
+$(document).ready(function() {
+    // Charger notifications au départ
+    loadNotifications();
 
+    // Rafraîchir toutes les 10 secondes
+    setInterval(loadNotifications, 10000);
+
+    // Marquer toutes comme lues quand on clique sur la cloche
+    $("#notif_bell").on("click", function() {
+        $.getJSON("<?= base_url('vm_controller/mark_as_read') ?>", function() {
+            $("#notif_count").text("0");
+        });
+    });
+});
 </script>

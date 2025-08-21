@@ -20,6 +20,23 @@ class vm_controller extends CI_Controller {
         $this->load->view('login_view');
     }
 
+    public function prets_en_retard() {
+        $today = new DateTime();
+        $prets = $this->vm_model->get_prets_en_retard(); // récupère tous les prêts en retard
+
+        // Calculer le mois de retard pour chaque prêt
+        foreach ($prets as $pret) {
+            $date_echeance = new DateTime($pret->Date_pret);
+            $diff = $date_echeance->diff($today);
+            $pret->mois_retard = $diff->y * 12 + $diff->m;
+            if ($pret->mois_retard == 0 && $diff->days > 0) {
+                $pret->mois_retard = 1;
+            }
+        }
+
+        return $prets;
+    }
+
 
 
 public function sazy($action = null, $ID_sazy = null){
@@ -81,6 +98,9 @@ if ($this->input->post('action') == 'add') {
     }
 
     // Vue
+
+    $data['prets_en_retard'] = $this->prets_en_retard();
+    $data['count_prets_en_retard'] = count($data['prets_en_retard']);
     $this->load->view('sazy_view', $data);
 }
 
@@ -203,6 +223,9 @@ public function engalia($action = null, $ID_engalia = null)
         }
     
         // Vue
+
+        $data['prets_en_retard'] = $this->prets_en_retard();
+        $data['count_prets_en_retard'] = count($data['prets_en_retard']);
         $this->load->view('anjara_view', $data);
 		}
 
@@ -318,6 +341,8 @@ public function pret($action = null, $ID_pret = null){
         }
     
         // Vue
+        $data['prets_en_retard'] = $this->prets_en_retard();
+        $data['count_prets_en_retard'] = count($data['prets_en_retard']);
         $this->load->view('pret_view', $data);
     	
 }
@@ -418,6 +443,8 @@ public function remboursement($action = null, $ID_remboursement = null){
     }
 
     // Vue
+    $data['prets_en_retard'] = $this->prets_en_retard();
+    $data['count_prets_en_retard'] = count($data['prets_en_retard']);
     $this->load->view('liste_remboursement_view', $data);
     
 }
@@ -432,6 +459,7 @@ public function profil()
 
 public function membre($action = null, $ID_membre = null) {
     $this->load->model('vm_model');
+    
     $data = [];
 
     
@@ -488,6 +516,8 @@ public function membre($action = null, $ID_membre = null) {
     }
 
     // Vue
+    $data['prets_en_retard'] = $this->prets_en_retard();
+    $data['count_prets_en_retard'] = count($data['prets_en_retard']);
     $this->load->view('membre_view', $data);
 }
 
@@ -545,6 +575,8 @@ public function cotisation($action = null, $ID_cotisation = null) {
     }
 
     // Vue
+    $data['prets_en_retard'] = $this->prets_en_retard();
+    $data['count_prets_en_retard'] = count($data['prets_en_retard']);
     $this->load->view('cotisation_view', $data);
 }
 
@@ -633,6 +665,14 @@ public function dashboard() {
     $username = $this->session->userdata('prenom');
     $this->load->model('vm_model');
 
+    $prets_en_retard = $this->prets_en_retard();
+    $count = count($prets_en_retard);
+
+    $data = [
+        'prets_en_retard' => $prets_en_retard,
+        'count_prets_en_retard' => $count
+    ];
+
     $data['total_membre'] = $this->vm_model->total_membre();
     $data['total_part'] = $this->vm_model->total_part();
     $data['total_sazy'] = $this->vm_model->total_sazy();
@@ -664,42 +704,101 @@ public function logout() {
     redirect('vm_controller/login');
 }
 
-public function get_new_notifications() {
-    $last_id = $this->input->get('last_id'); // Dernier ID reçu côté client
+ // Créer les notifications pour les prêts en retard
+ public function check_retards() {
+    $this->vm_model->inserer_notifications_retard();
+}
 
-    $notifications = $this->Pret_model->get_new_notifications($last_id);
+// Récupérer notifications non lues
+public function get_notifications() {
+    $notifications = $this->vm_model->get_non_lu();
+    echo json_encode($notifications);
 
-    // Calculer les compteurs par catégorie
-    $compteurs = [
-        'en_retard' => 0,
-        'toujours_impaye' => 0,
-        'impaye_chronique' => 0
-    ];
+      // TEST : afficher pour vérifier
+      echo "<pre>";
+      print_r($notifications);
+      die();
+}
 
-    foreach ($notifications as $notif) {
-        if(strpos($notif['titre'], 'En retard') !== false) {
-            $compteurs['en_retard']++;
-        } elseif(strpos($notif['titre'], 'Toujours impayé') !== false) {
-            $compteurs['toujours_impaye']++;
-        } elseif(strpos($notif['titre'], 'Impayé chronique') !== false) {
-            $compteurs['impaye_chronique']++;
-        }
-    }
+// Compter les notifications non lues
+public function count_notifications() {
+    $count = $this->vm_model->count_non_lu();
+    echo json_encode(['count' => $count]);
+}
 
-    // Générer les badges HTML
-    $badges_html = '';
-    if($compteurs['en_retard'] > 0) $badges_html .= '<span class="badge bg-warning">'.$compteurs['en_retard'].' 🟡</span> ';
-    if($compteurs['toujours_impaye'] > 0) $badges_html .= '<span class="badge" style="background-color:orange;">'.$compteurs['toujours_impaye'].' 🟠</span> ';
-    if($compteurs['impaye_chronique'] > 0) $badges_html .= '<span class="badge bg-danger">'.$compteurs['impaye_chronique'].' 🔴</span>';
-
-    // Retour JSON pour Ajax
-    echo json_encode([
-        'notif_count'   => count($notifications),
-        'notifications' => $notifications,
-        'badges_html'   => $badges_html
-    ]);
+// Marquer toutes les notifications comme lues
+public function mark_as_read() {
+    $this->vm_model->mark_all_as_read();
+    echo json_encode(['status' => 'success']);
 }
 
 
+
+public function prets_en_retard() {
+    $today = new DateTime();
+
+    $this->db->select('pret.*, membre.nom, membre.prenom');
+    $this->db->from('pret');
+    $this->db->join('membre', 'membre.ID_membre = pret.ID_membre');
+    $this->db->where('pret.Date_pret <', $today->format('Y-m-d'));
+    $this->db->where('pret.statut', 'en_cours');
+    $this->db->where('pret.lu', 0); // notifications non lues
+    $prets = $this->db->get()->result();
+
+    foreach ($prets as $pret) {
+        $date_echeance = new DateTime($pret->Date_pret);
+        $diff = $date_echeance->diff($today);
+        $pret->mois_retard = $diff->y * 12 + $diff->m;
+        if ($pret->mois_retard == 0 && $diff->days > 0) {
+            $pret->mois_retard = 1;
+        }
+    }
+
+    return $prets;
+}
+
+public function get_all_prets_en_retard() {
+    $today = new DateTime();
+
+    $this->db->select('pret.*, membre.nom, membre.prenom');
+    $this->db->from('pret');
+    $this->db->join('membre', 'membre.ID_membre = pret.ID_membre');
+    $this->db->where('pret.Date_pret <', $today->format('Y-m-d'));
+    $this->db->where('pret.statut', 'en_cours');
+    $prets = $this->db->get()->result();
+
+    foreach ($prets as $pret) {
+        $date_echeance = new DateTime($pret->Date_pret);
+        $diff = $date_echeance->diff($today);
+        $pret->mois_retard = $diff->y * 12 + $diff->m;
+        if ($pret->mois_retard == 0 && $diff->days > 0) {
+            $pret->mois_retard = 1;
+        }
+    }
+
+    return $prets;
+}
+
+public function notification() {
+    $this->load->model('vm_model');
+
+    // Récupérer tous les prêts en retard pour la page complète
+    $prets_en_retard = $this->get_all_prets_en_retard();
+
+    // Compter les prêts non lus pour le badge
+    $count_prets_en_retard = count($this->prets_en_retard());
+
+    $data = [
+        'prets_en_retard' => $prets_en_retard,
+        'count_prets_en_retard' => $count_prets_en_retard
+    ];
+
+    // Marquer tous les prêts non lus comme lus
+    $this->db->set('lu', 1);
+    $this->db->where('lu', 0);
+    $this->db->update('pret');
+
+    $this->load->view('notification_view', $data);
+}
 
 }

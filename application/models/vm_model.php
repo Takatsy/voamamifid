@@ -164,8 +164,15 @@ class Vm_model extends CI_Model {
     }
 
     public function update_pret($ID_pret, $data) {
+          // Supprimer tous les remboursements liés au prêt
+        $this->db->where('ID_pret', $ID_pret);
+        $this->db->delete('remboursement');
+
         $this->db->where('ID_pret', $ID_pret);
         $this->db->update('pret', $data);
+
+        // Mettre à jour automatiquement le statut du prêt
+        $this->update_statut_pret($ID_pret);
     } 
     /////////remboursement////////
     
@@ -210,9 +217,22 @@ class Vm_model extends CI_Model {
     
 
     public function update_remboursement($ID_remboursement, $data) {
+    // Récupérer l'ID du prêt associé à ce remboursement
+    $this->db->select('ID_pret');
+    $this->db->from('remboursement');
+    $this->db->where('ID_remboursement', $ID_remboursement);
+    $query = $this->db->get();
+    $pret = $query->row();
+
+    if ($pret) {
+        // Mettre à jour le remboursement
         $this->db->where('ID_remboursement', $ID_remboursement);
         $this->db->update('remboursement', $data);
-    } 
+
+        // Mettre à jour automatiquement le statut du prêt associé
+        $this->update_statut_pret($pret->ID_pret);
+    }
+}
 
     public function get_reste_a_payer($ID_pret, $taux = 10, $mois = 1)
     {
@@ -317,7 +337,7 @@ class Vm_model extends CI_Model {
         // Calculer 10% du montant du prêt
         $seuil = $pret->Montant + ($pret->Montant * 0.10);
     
-        if ($total_rembourse = $seuil) {
+        if ($total_rembourse == $seuil) {
             $this->db->where('ID_pret', $ID_pret);
             $this->db->update('pret', ['Statut' => 'Payé']);
         } else {
@@ -358,60 +378,13 @@ class Vm_model extends CI_Model {
     public function ajouter_interet($data) {
         return $this->db->insert('interet', $data);
     }
+   
+   
     
-    public function get_new_notifications($last_id = 0) {
-        $today = new DateTime();
     
-        $this->db->select("pret.ID_pret, pret.date_pret, pret.statut, membre.nom, membre.prenom");
-        $this->db->from("pret");
-        $this->db->join("membre", "membre.ID_membre = pret.ID_pret");
-        $this->db->where("pret.statut !=", "paye");
-        if($last_id > 0){
-            $this->db->where("pret.ID_pret >", $last_id);
-        }
-        $prets = $this->db->get()->result();
-    
-        $notifications = [];
-    
-        foreach ($prets as $pret) {
-            $datePret = new DateTime($pret->date_pret);
-            $dateEcheance = clone $datePret;
-            $dateEcheance->modify('+1 month');
-    
-            if ($today > $dateEcheance) {
-                $interval = $dateEcheance->diff($today);
-                $moisRetard = ($interval->y * 12) + $interval->m;
-    
-                // Définir le statut et la couleur
-                if ($moisRetard == 1) {
-                    $statut = "En retard";
-                    $couleur = "text-warning";
-                    $icone = "bi bi-exclamation-circle";
-                } elseif ($moisRetard == 2) {
-                    $statut = "Toujours impayé";
-                    $couleur = "text-orange"; // classe custom
-                    $icone = "bi bi-x-circle";
-                } else {
-                    $statut = "Impayé chronique";
-                    $couleur = "text-danger";
-                    $icone = "bi bi-exclamation-triangle";
-                }
-    
-                $notifications[] = [
-                    'id'      => $pret->ID_pret,
-                    'titre'   => "Prêt n°{$pret->ID_pret} - {$statut}",
-                    'message' => "Membre: {$pret->nom} {$pret->prenom} - Échéance dépassée : {$moisRetard} mois de retard",
-                    'time'    => "Depuis le " . $dateEcheance->format('d/m/Y'),
-                    'couleur' => $couleur,
-                    'icone'   => $icone
-                ];
-            }
-        }
-    
-        return $notifications;
+    public function count_prets_en_retard() {
+        return count($this->get_prets_en_retard());
     }
-    
-    
     
 }
     
