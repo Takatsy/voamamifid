@@ -732,73 +732,28 @@ public function mark_as_read() {
     echo json_encode(['status' => 'success']);
 }
 
-
-
-public function prets_en_retard() {
-    $today = new DateTime();
-
-    $this->db->select('pret.*, membre.nom, membre.prenom');
-    $this->db->from('pret');
-    $this->db->join('membre', 'membre.ID_membre = pret.ID_membre');
-    $this->db->where('pret.Date_pret <', $today->format('Y-m-d'));
-    $this->db->where('pret.statut', 'en_cours');
-    $this->db->where('pret.lu', 0); // notifications non lues
-    $prets = $this->db->get()->result();
-
-    foreach ($prets as $pret) {
-        $date_echeance = new DateTime($pret->Date_pret);
-        $diff = $date_echeance->diff($today);
-        $pret->mois_retard = $diff->y * 12 + $diff->m;
-        if ($pret->mois_retard == 0 && $diff->days > 0) {
-            $pret->mois_retard = 1;
-        }
-    }
-
-    return $prets;
-}
-
-public function get_all_prets_en_retard() {
-    $today = new DateTime();
-
-    $this->db->select('pret.*, membre.nom, membre.prenom');
-    $this->db->from('pret');
-    $this->db->join('membre', 'membre.ID_membre = pret.ID_membre');
-    $this->db->where('pret.Date_pret <', $today->format('Y-m-d'));
-    $this->db->where('pret.statut', 'en_cours');
-    $prets = $this->db->get()->result();
-
-    foreach ($prets as $pret) {
-        $date_echeance = new DateTime($pret->Date_pret);
-        $diff = $date_echeance->diff($today);
-        $pret->mois_retard = $diff->y * 12 + $diff->m;
-        if ($pret->mois_retard == 0 && $diff->days > 0) {
-            $pret->mois_retard = 1;
-        }
-    }
-
-    return $prets;
-}
-
 public function notification() {
     $this->load->model('vm_model');
 
-    // Récupérer tous les prêts en retard pour la page complète
-    $prets_en_retard = $this->get_all_prets_en_retard();
+    // Récupérer tous les prêts en retard avec info du membre
+    $prets_en_retard = $this->vm_model->prets_en_retard(); // méthode du model
+    $count_prets_en_retard = count($prets_en_retard);
 
-    // Compter les prêts non lus pour le badge
-    $count_prets_en_retard = count($this->prets_en_retard());
-
-    $data = [
-        'prets_en_retard' => $prets_en_retard,
-        'count_prets_en_retard' => $count_prets_en_retard
-    ];
-
-    // Marquer tous les prêts non lus comme lus
+    // Marquer tous les prêts non lus comme lus (lu = 1)
     $this->db->set('lu', 1);
     $this->db->where('lu', 0);
     $this->db->update('pret');
 
+    $data = [
+        'prets_en_retard' => $prets_en_retard,
+        
+    ];
+
+    // Charger la vue notifications
+
+
     $this->load->view('notification_view', $data);
 }
+
 
 }

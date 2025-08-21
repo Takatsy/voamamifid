@@ -88,8 +88,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <?php endforeach; ?>
           <?php else: ?>
-            <div class="notif-item px-3 py-2">
-              Tout est à jour ✅
+            <div class="notif-item px-3 py-2 text-center">
+              Auccune notification ✅
             </div>
           <?php endif; ?>
         </div>
@@ -102,7 +102,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <li class="nav-item dropdown pe-3">
       <?php if ($this->session->userdata('prenom')): ?>
       <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-        <img src="<?= base_url('assets/img/profile-img.jpg') ?>" alt="Profile" class="rounded-circle">
+      <i class="bi bi-person-circle fs-2 me-2"></i>
         <span class="d-none d-md-block dropdown-toggle ps-2">
           <?= htmlspecialchars($this->session->userdata('prenom')) ?>
         </span>

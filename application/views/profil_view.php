@@ -38,7 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-              <img src=<?php echo base_url('assets/img/profile-img.jpg')?> alt="Profile" class="rounded-circle">
+            <i class="bi bi-person-circle fs-1 "> </i>
               <h2><?= htmlspecialchars($this->session->userdata('nom').' '.$this->session->userdata('prenom')) ?></h2>
               <h3><?= htmlspecialchars($this->session->userdata('email')) ?></h3>
               <div class="social-links mt-2">

@@ -379,7 +379,61 @@ class Vm_model extends CI_Model {
         return $this->db->insert('interet', $data);
     }
    
+    public function get_prets_en_retard() {
+        $today = new DateTime();
+    
+
+        $this->db->select('pret.*, membre.nom, membre.prenom');
+        $this->db->from('pret');
+        $this->db->join('membre', 'membre.ID_membre = pret.ID_membre');
+        $this->db->where('pret.Date_pret <', $today->format('Y-m-d'));
+        $this->db->where('pret.Statut', 'encours');
+        $this->db->where('pret.lu', 0); // <-- récupérer uniquement les prêts non lus
+
+
    
+        $prets = $this->db->get()->result();
+    
+        // Calculer le mois de retard
+        foreach ($prets as $pret) {
+            $date_echeance = new DateTime($pret->Date_pret);
+            $diff = $date_echeance->diff($today);
+            $pret->mois_retard = $diff->y * 12 + $diff->m;
+            if ($pret->mois_retard == 0 && $diff->days > 0) {
+                $pret->mois_retard = 1;
+            }
+        }
+    
+        return $prets;
+    }
+    public function prets_en_retard() {
+        $today = new DateTime();
+    
+
+        $this->db->select('pret.*, membre.nom, membre.prenom');
+        $this->db->from('pret');
+        $this->db->join('membre', 'membre.ID_membre = pret.ID_membre');
+        $this->db->where('pret.Date_pret <', $today->format('Y-m-d'));
+        $this->db->where('pret.Statut', 'encours');
+       // <-- récupérer uniquement les prêts non lus
+
+
+   
+        $prets = $this->db->get()->result();
+    
+        // Calculer le mois de retard
+        foreach ($prets as $pret) {
+            $date_echeance = new DateTime($pret->Date_pret);
+            $diff = $date_echeance->diff($today);
+            $pret->mois_retard = $diff->y * 12 + $diff->m;
+            if ($pret->mois_retard == 0 && $diff->days > 0) {
+                $pret->mois_retard = 1;
+            }
+        }
+    
+        return $prets;
+    }
+
     
     
     public function count_prets_en_retard() {
